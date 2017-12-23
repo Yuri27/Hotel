@@ -1,0 +1,1194 @@
+
+
+article,aside,footer,header,nav{
+	display:block;
+}
+*{
+	font-family: COMIC SANS MS;/*CURSIVE;*/
+}
+body{
+	font-family: COMIC SANS MS;/*CURSIVE;*/
+	width: 98%;
+	/*margin:0 auto;*/
+	border: 0px solid #333;
+	background-image: url(../images/bg2.png);
+}
+.host{
+	margin: 0 auto;
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 60%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+	text-align: center;
+}
+
+.host label{
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	text-align: left;
+	margin-left: 150px;  
+	/*margin-top: 50px;*/
+}
+.host button{
+	margin: 0,auto;
+	width: 450px;
+	height: 50px;
+	padding-top: 8px;
+	margin-left: 10px;
+	background: #1f1ff2;
+	color: #FFF;
+	font-size: 24px;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	border-radius: 20px;
+	vertical-align: bottom;
+}
+
+.host input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+	/*margin-left: 50px;*/
+}
+
+.wrapper{
+	width: 100%;
+}
+
+#top_nav{
+	top: 0px; /*высота шапки в пикселях*/
+	width: 100%;
+	padding: 0px 0px;
+	text-align: center;
+	background: #eee8e8;
+	position: fixed;
+	z-index: 1;
+
+}
+.register_signup{
+	height: 45px;
+	width: 100%;
+	background-color: #eee8e8;
+	text-align: right;
+	border-bottom: 2px dotted black;
+	margin-bottom: 10px;
+}
+
+.register_signup a{
+	position: relative;
+	text-decoration: none;
+	right: 25px;
+	font-size: 18px;
+	color: black;
+	top: 10px;
+}
+
+.register_signup a:hover{
+	text-decoration: underline;
+	font-size: 20px;
+	opacity: 0.6;
+}
+#user{
+	float: left;
+	text-align: center;
+	margin-top: -8px;
+	color: black;
+	/*color: #0303b7;*/
+}
+#user h4{
+	position: relative;
+	margin-top: -24px;
+	left: 50px;
+	cursor: default;
+	color: black;
+	/*#0303b7;*/
+}
+#user h4:hover{
+	text-decoration: underline;
+	/*font-size: 20px;*/
+	opacity: 0.6;
+}
+
+#user a{
+	position: relative;
+	margin-left: 25px;
+
+	color: #0303b7;
+}
+
+.admin, #admins{
+	text-align: center;
+}
+#admins{
+	margin-top: -80px;
+}
+#admins label{
+	margin-left: 450px;
+}
+#admins h3{
+	font-size: 24px;
+}
+#admins input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+	/*margin-left: 50px;*/
+}
+
+img.search{
+	vertical-align: bottom;
+	position: absolute;
+	text-align: center;
+	left: 0px;
+	height: 62px;
+}
+
+input.services {
+	background-image: url(../images/uslugi.png); 
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 4px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	height: 60px;
+	width: 700px;
+	text-align: center;
+	color: #b2b2b2;
+	font-size: 24px;
+	padding: 0 0px;
+	padding-left: 40px;/*отступ картинки*/
+	vertical-align: bottom;
+}
+
+input.search {
+	background-image: url(../images/search.png); 
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 4px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	height: 60px;
+	width: 700px;
+	color: #b2b2b2;
+	font-size: 24px;
+	padding: 0 0px;
+	padding-left: 40px;/*отступ картинки*/
+	vertical-align: bottom;
+}
+select.search {
+	background-image: url(../images/search.png); 
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 4px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	height: 60px;
+	width: 700px;
+	color: #b2b2b2;
+	font-size: 24px;
+	padding: 0 0px;
+	padding-left: 40px;/*отступ картинки*/
+	vertical-align: bottom;
+}
+
+
+button.search-btn{
+	width: 100px;
+	height: 60px;
+	margin-left: 5px;
+	background: #1f1ff2;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	/*vertical-align: bottom;*/
+}
+.search-btn:hover {
+	opacity: 0.6;
+}
+
+.menu-btn {
+	/*float: right;*/
+	position: absolute;
+	width: 100px;
+	height: 62px;
+	padding: 0px;
+	background: #eee8e8;
+	color: #333;
+	text-align: center;
+	cursor: pointer;
+	margin-top: 47px;
+	font-size: 18px;
+	right: 0px;
+	z-index: 2;
+	border: 0px;
+	vertical-align: bottom;
+}
+.menu-btn:hover {
+	opacity: 0.6;
+}
+ul {
+	margin: 0;
+	padding: 0;
+	/*height: 300px;*/
+}
+
+#bokaroom{
+	margin: 0 auto;
+	/*margin-top: 108px;*/
+	/*padding: 108px 0px;*/
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 80%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+	margin-top: -38px;
+}
+
+#bokaroom input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+	margin-left: 50px;
+}
+
+#bokaroom img{
+	position: absolute;
+	top: 170px;
+	right: 200px;
+}
+
+#bokaroom h5{
+	position: absolute;
+	top: 415px;
+	right: 200px;
+	width: 440px;
+	text-align: justify;
+}
+
+.form-control{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 200px;
+	/*color: #333;*/
+	font-size: 24px;
+}
+
+
+#country, #phone {
+	display: inline-block;
+	width: auto;
+	margin-left: 50px;
+}
+
+label[for="phone"] {
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	margin-left: 50px;  
+	/*margin-top: 50px;*/
+}
+
+label[for="category"] {
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	margin-left: 50px;  
+	/*margin-top: 50px;*/
+}
+
+button.zakaz-btn{
+	margin: 0,auto;
+	width: 450px;
+	height: 50px;
+	padding-top: 8px;
+	margin-left: 10px;
+	background: #1f1ff2;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	border-radius: 20px;
+	vertical-align: bottom;
+}
+.zakaz-btn:hover {
+	opacity: 0.6;
+}
+
+
+button.login-btn{
+	margin: 0,auto;
+	width: 250px;
+	height: 50px;
+	/*margin-top: 10%;*/
+	/*margin-bottom: 10%;*/
+	background: #1f1ff2;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	border-radius: 20px;
+	vertical-align: bottom;
+}
+.login-btn:hover {
+	opacity: 0.6;
+}
+
+article {
+	margin-top: 148px;
+	min-height: 100%;
+}
+
+article #ggt{
+	background: none;
+	border: none;
+}
+
+article #ggt:hover{
+	text-decoration: underline;
+	cursor: pointer;
+	color: navy;
+}
+
+button#zabron{
+	margin: 0,auto;
+	width: 250px;
+	height: 50px;
+	margin-top: -20px;
+	background: #1f1ff2;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	font-size: 20px;
+}
+
+#zabron:hover {
+	opacity: 0.6;
+}
+
+#bokaroom_info{
+	margin: 0 auto;
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 80%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+}
+
+#bokaroom_info img{
+	position: absolute;
+	top: 160px;
+	right: 200px;
+	/*	position:  relative;
+	top: -400px;
+	right: -570px;*/
+}
+
+#bokaroom_info h5{
+	position: absolute;
+	top: 440px;
+	right: 200px;
+	width: 440px;
+	text-align: justify;
+}
+
+#bokaroom_info input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+	margin-left: 50px;
+}
+
+#bokaroom_info button{
+	margin: 0,auto;
+	width: 250px;
+	height: 50px;
+	/*padding-top: 8px;*/
+	background: #1f1ff2;
+	margin-left: 25px;
+	color: #FFF;
+	cursor: pointer;
+	border: 0px;
+	border-radius: 20px;
+	font-size: 24px;
+}
+
+.blocks{
+	overflow: hidden;
+	width: 100%;
+}
+
+.block1{
+	float: left;
+	width: 50%;
+	height: 100%; 
+	text-align: justify;
+}
+
+.block2{
+	margin-top: 20px;
+	float: left; 
+	width: 25%; 
+	height: 100%; 
+	text-align: center;
+}
+
+.block3{
+	float: left;
+	width: 25%;
+	height: 100%;
+	text-align: center;
+}
+
+.sprite {
+	background-image: url(../images/social/spritesheet.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	margin: 15px 0px 0 0;
+}
+
+.sprite-facebook {
+	width: 24px;
+	height: 24px;
+	background-position: 0 0;
+}
+
+.sprite-google-plus {
+	width: 24px;
+	height: 24px;
+	background-position: -24px 0;
+}
+
+.sprite-instagram {
+	width: 24px;
+	height: 24px;
+	background-position: -48px 0;
+}
+
+.sprite-twitter {
+	width: 24px;
+	height: 24px;
+	background-position: -72px 0;
+}
+
+footer{
+	/*border-top: 8px solid #FFFFFF;*/
+	margin-top: 20px;
+	padding-top: 30px;
+	display: block;
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	background-color:  #DCDCDC;
+}
+
+.logo_footer{
+	margin-top: -30px;
+	width: 100%;
+	height: 100%;
+}
+
+.logo_footer img{
+	transform: translate(25%, 25%);
+	margin: -20px 45px 0px 0;	
+}
+
+.my{
+	margin-top: -10px;
+	width: 100%;
+	height: 100%;
+	text-align: left;
+	background-color: #C0C0C0;
+}
+.soc{
+	position: absolute;
+	margin-top: -90px;
+	right: 50px;
+}
+
+.social_mini {
+    background-image: url(../images/social/spritesheetfooter.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.social_mini-facebook {
+    width: 24px;
+    height: 24px;
+    background-position: -10px -10px;
+}
+
+.social_mini-google-plus {
+    width: 24px;
+    height: 24px;
+    background-position: -54px -10px;
+}
+
+.social_mini-skype {
+    width: 24px;
+    height: 24px;
+    background-position: -98px -10px;
+}
+
+.social_mini-vk {
+    width: 24px;
+    height: 24px;
+    background-position: -142px -10px;
+}
+
+.social_mini-whatsapp {
+    width: 24px;
+    height: 24px;
+    background-position: -186px -10px;
+}
+
+.social_mini-youtube {
+    width: 24px;
+    height: 24px;
+    background-position: -230px -10px;
+}
+
+.tableservice {
+	top: 100px;
+	width: 75%;
+	vertical-align: center;
+	border-spacing: 0 10px;
+	/*font-family: 'Open Sans', sans-serif;*/
+	font-weight: bold;
+	background: #DCDCDC;
+
+}
+#sdvig {
+	/*vertical-align: middle;*/
+	width: 150px;
+	height: 30px;
+	padding: 10px;
+	margin-left: 167px;
+	font-size: 16px;
+	font-weight: bold;
+	color:red;
+	/*text-align: left;*/
+}
+.tableservice td {
+	vertical-align: middle;
+	padding: 10px;
+	font-size: 14px;
+	text-align: left;
+	background: #DCDCDC;
+}
+
+/*.tableservice td:nth-child(4){
+	text-align: left;
+	color:red;
+	font-weight: bold;
+}*/
+
+/* Cначала обозначаем стили для IE8 и более старых версий
+т.е. здесь мы немного облагораживаем стандартный чекбокс. */
+.checkbox {
+  vertical-align: top;
+  margin: 0 3px 0 0;
+  width: 17px;
+  height: 17px;
+}
+/* Это для всех браузеров, кроме совсем старых, которые не поддерживают
+селекторы с плюсом. Показываем, что label кликабелен. */
+.checkbox + label {
+  cursor: pointer;
+}
+
+/* Далее идет оформление чекбокса в современных браузерах, а также IE9 и выше.
+Благодаря тому, что старые браузеры не поддерживают селекторы :not и :checked,
+в них все нижеследующие стили не сработают. */
+
+/* Прячем оригинальный чекбокс. */
+.checkbox:not(checked) {
+  position: absolute;
+  opacity: 0;
+}
+.checkbox:not(checked) + label {
+  position: relative; /* будем позиционировать псевдочекбокс относительно label */
+  padding: 0 0 0 60px; /* оставляем слева от label место под псевдочекбокс */
+}
+/* Оформление первой части чекбокса в выключенном состоянии (фон). */
+.checkbox:not(checked) + label:before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 50px;
+  height: 26px;
+  border-radius: 13px;
+  background: #CDD1DA;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,.2);
+}
+/* Оформление второй части чекбокса в выключенном состоянии (переключатель). */
+.checkbox:not(checked) + label:after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 10px;
+  background: #FFF;
+  box-shadow: 0 2px 5px rgba(0,0,0,.3);
+  transition: all .2s; /* анимация, чтобы чекбокс переключался плавно */
+}
+/* Меняем фон чекбокса, когда он включен. */
+.checkbox:checked + label:before {
+  background: #1f1ff2; /*#9FD468;*/
+}
+/* Сдвигаем переключатель чекбокса, когда он включен. */
+.checkbox:checked + label:after {
+  left: 26px;
+}
+/* Показываем получение фокуса. */
+.checkbox:focus + label:before {
+  box-shadow: 0 0 0 3px rgba(255,255,0,.5);
+}
+
+button.service-btn{
+	position: relative;
+	margin: 0,auto;
+	width: 450px;
+	height: 50px;
+	padding-top: 8px;
+	margin-left: 35%;
+	background: #1f1ff2;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: 0px;
+	/*border-radius: 20px;*/
+	vertical-align: bottom;
+}
+.service-btn:hover {
+	opacity: 0.6;
+}
+
+
+/* Окна */
+.login_div {
+	width: 600px; 
+	height: 350px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 35%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -200px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 20px;
+	text-align: center;
+}
+.login_div a{
+	position: relative;
+	top: -25px;
+	text-decoration: none;
+}
+.login_div a:hover{
+	text-decoration: underline;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.login_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.login_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+.pass_div {
+	width: 600px; 
+	height: 350px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 35%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -200px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 20px;
+	text-align: center;
+}
+
+.pass_div input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	/*border: 1px solid #777777;*/
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	border: 2px #777777 solid;
+	font-size: 24px;
+}
+
+/* Кнопка закрыть для тех кто в танке) */
+.pass_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.pass_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+/* Подложка */
+#overlay {
+	z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.7; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+
+.login_div input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	/*border: 1px solid #777777;*/
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	border: 2px #777777 solid;
+	font-size: 24px;
+}
+
+.login_div h3{
+	font-size: 24px;
+	color: #1f1ff2;
+}
+
+label[for="login"] {
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	position: relative;
+	margin-left: 55px;
+	text-align: left; 
+	/*margin-top: 50px;*/
+}
+
+.bron_div {
+	width: 600px; 
+	height: 350px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 35%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -200px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 20px;
+	text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.bron_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.bron_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+.pos_div {
+	width: 600px; 
+	height: 350px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 35%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -200px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 20px;
+	text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.pos_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.pos_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+.room_div {
+	width: 600px; 
+	height: 350px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 35%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -200px;
+	margin-left: -150px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 20px;
+	text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.room_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.room_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+/* Подложка */
+#overlay {
+	z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.7; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+
+
+.error input,.error textarea {
+      border: 1px solid red;
+    }
+
+    .error {
+      color: red;
+    }
+
+#registrate{
+	margin: 0 auto;
+	/*margin-top: 108px;*/
+	/*padding: 108px 0px;*/
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 60%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+margin-right: 250px;
+	text-align: center;
+}
+
+#registrate input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+	
+}
+
+button#regist-btn{
+	/*margin: 0,auto;*/
+	width: 250px;
+	height: 50px;
+	background: #1f1ff2;
+	color: #FFF;
+	/*margin-left:35%;*/
+	/*margin-left: 34.5%;*/
+	cursor: pointer;
+	border: 0px;
+	border-radius: 20px;
+}
+#registrate button:hover {
+	opacity: 0.6;
+}
+
+#registrate label{
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	position: relative;
+	margin-left: -370px;
+	text-align: center; 
+}
+
+#result {
+ 	color:#074776;
+	font-size:18px;
+	font-weight:bold;
+	display: block;
+ }
+ #bg_res {
+ 	width:100px;
+	height:10px;
+	margin:0 auto;
+	background-image:url("../images/color.jpg");
+	background-repeat: no-repeat;
+	background-position:-200px;
+ }
+ 
+ .red {
+ 	background-position:-150px 0px !important;
+ }
+ 
+  .yellow {
+ 	background-position:-100px -10px !important;
+ }
+ 
+  .green {
+ 	background-position:-30px -20px !important;
+ }
+ 
+  .green_v {
+ 	background-position:0px -20px !important;
+ }
+
+ .contact{
+	margin: 0 auto;
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 80%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+ }
+
+ .contact input{
+ 	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 500px;
+	color: #333;
+	font-size: 24px;
+ }
+
+.contact textarea{
+	overflow-x: scroll; 
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	color: #333;
+	font-size: 24px;
+	margin-top: 50px;
+	width: 480px;
+}
+
+.contact button{
+	position: relative;
+	/*margin: 0,auto;*/
+	width: 250px;
+	height: 50px;
+	top: -200px;
+	left: 400px;
+	background: #1f1ff2;
+	color: #FFF;
+	/*text-align: center;*/
+	cursor: pointer;
+	border: 0px;
+	font-size: 20px;
+}
+
+.contact button:hover{
+	opacity: 0.7;
+}
+
+/* .contact textarea label{
+ 	float: right;
+ }*/
+#cont{
+	overflow: hidden;
+	width: 100%;
+}
+ #cont1{
+	position: relative;
+	width: 50%;
+	height: 250px;
+	top: 20px;
+	left: 0px;
+
+	/*background: yellow;*/
+	text-align: center;
+	/*padding-top: 5px;*/
+	padding-bottom: 10px;
+}
+
+#cont2{
+	width: 50%; 
+	height: 250px;
+	/*vertical-align: bottom;*/
+	/*height: 186px;*/
+	/*margin-top: -166px;*/
+	/*background: green;*/
+	position: relative;
+	left: 529px;
+	top: -256px; 
+	/*margin-left: 529px; 595px; если #user_login width: 80%;/*/
+	text-align: center;
+	/*padding-top: 5px;*/
+	padding-bottom: 10px;
+}
+
+#reports{
+	margin: 0 auto;
+	box-shadow: 0px 4px 10px #9d9d9d;
+	width: 60%;
+	height: 100%;
+	background: white;
+	margin-top: 46px;
+	text-align: center;
+}
+
+#reports input{
+ 	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	border: 1px solid #e7e7e7;
+	border-radius: 8px;
+	height: 50px;
+	width: 300px;
+	color: #333;
+	font-size: 24px;
+ }
+
+ #reports button{
+	position: relative;
+	/*margin: 0,auto;*/
+	width: 250px;
+	height: 50px;
+	top: -5px;
+	left: 0px;
+	background: #1f1ff2;
+	color: #FFF;
+	/*text-align: center;*/
+	cursor: pointer;
+	border: 0px;
+	font-size: 20px;
+}
+
+#reports button:hover{
+	opacity: 0.7;
+}

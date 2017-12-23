@@ -1,0 +1,386 @@
+var OFT_SCOPE = '_oft';
+var OFT_STORAGE_SCOPE = 'oft';
+if(!window._oft){
+	window._oft = {
+		hasReferrer: false,
+		facilitatorForwarding:false,
+		destinationDomain:"",
+		callback:null,
+		variables:null,
+		facilitatorId:"CSOSEO",
+		protocol:"https",
+		facilitatorSet:false,
+		config:{
+			classification:{
+				// TODO - flesh out the list of search engine domains
+				'refs':[
+					{'t':'org','c':'g', 'patterns':['google.']},//google referrer
+					{'t':'org','c':'b', 'patterns':['bing.']},//bing referrer
+					{'t':'org','c':'yandex', 'patterns':['yandex.']},//yandex referrer
+					{'t':'org','c':'ask', 'patterns':['ask']},//ask referrer
+					{'t':'org','c':'yahoo', 'patterns':['r.search.yahoo.com']},//Yahoo referrer
+					{'t':'org','c':'youtube', 'patterns':['youtube']},//Youtube referrer
+				    {'t':'org','c':'aol', 'patterns':['aol']},
+				    {'t':'org','c':'baidu', 'patterns':['baidu']},
+				    {'t':'org','c':'biglobe.ne.jp', 'patterns':['biglobe.ne.jp']},
+				    {'t':'org','c':'bt.com', 'patterns':['bt.com']},
+				    {'t':'org','c':'centrum.cz', 'patterns':['centrum.cz']},
+				    {'t':'org','c':'daum.net', 'patterns':['daum.net']},
+				    {'t':'org','c':'docomo.ne.jp', 'patterns':['docomo.ne.jp']},
+				    {'t':'org','c':'dogpile.com', 'patterns':['dogpile.com']},
+				    {'t':'org','c':'duckduckgo.com', 'patterns':['duckduckgo.com']},
+				    {'t':'org','c':'earthlink.net', 'patterns':['earthlink.net']},
+				    {'t':'org','c':'eniro', 'patterns':['eniro']},
+				    {'t':'org','c':'goo.ne.jp', 'patterns':['goo.ne.jp']},
+				    {'t':'org','c':'ixquick.com', 'patterns':['ixquick.com']},
+				    {'t':'org','c':'kvasir', 'patterns':['kvasir']},
+				    {'t':'org','c':'lycos', 'patterns':['lycos']},
+				    {'t':'org','c':'mail.ru', 'patterns':['mail.ru']},
+				    {'t':'org','c':'myway.com', 'patterns':['myway.com']},
+				    {'t':'org','c':'naver.com', 'patterns':['naver.com']},
+				    {'t':'org','c':'nifty.com', 'patterns':['nifty.com']},
+				    {'t':'org','c':'rakuten.com', 'patterns':['rakuten.com']},
+				    {'t':'org','c':'rambler.ru', 'patterns':['rambler.ru']},
+				    {'t':'org','c':'reference.com', 'patterns':['reference.com']},
+				    {'t':'org','c':'search-results.com', 'patterns':['search-results.com']},
+				    {'t':'org','c':'search.ch', 'patterns':['search.ch']},
+				    {'t':'org','c':'search.yahoo', 'patterns':['search.yahoo']},
+				    {'t':'org','c':'seznam.cs', 'patterns':['seznam.cs']},
+				    {'t':'org','c':'sleipnir', 'patterns':['sleipnir']},
+				    {'t':'org','c':'sm.cn', 'patterns':['sm.cn']},
+				    {'t':'org','c':'so.com', 'patterns':['so.com']},
+				    {'t':'org','c':'sogou', 'patterns':['sogou']},
+				    {'t':'org','c':'uol', 'patterns':['uol']},
+				    {'t':'org','c':'virgilio.it', 'patterns':['virgilio.it']},
+				    {'t':'org','c':'web.de', 'patterns':['web.de']},
+				    {'t':'org','c':'youdao.com', 'patterns':['youdao.com']}
+					],
+				'utag_channel':'channel'
+			}
+		},
+		init:function(destinationDomain, facilitatorForwarding, callback, variables){
+			// Read the various browser parameters
+			if (!variables){
+				this.variables = {
+					search:decodeURIComponent(location.search),
+					userAgent:navigator.userAgent,
+					ref:document.referrer,
+					domain:location.hostname,
+					args:{},
+					expires:30,
+					action:"/cs/integration/pfp-v3/store_cookie.jsp",
+					protocol:"https"
+				};
+	    	} else {
+	    		this.variables = variables;
+	    		if (this.variables.args == null ) this.variables.args = {};
+	    	}
+			var query = this.variables.search.substring(1).split('&');
+			var args = this.variables.args;
+    		jQuery.each(query,function(idx,entry){
+    			var pair = entry.split('=');
+    			if (pair[0] != null && pair[0].length > 0){
+    				args[pair[0]] = pair[1];
+    			}
+    		});
+			if(this.variables.ref != null && this.variables.ref.length > 0){
+				var a = document.createElement("a");
+				a.href = this.variables.ref;
+				this.variables.refDomain = a.hostname;
+				this.hasReferrer = true;
+			}
+
+			// Set up the booking domain
+			// If no domain is supplied use the .com of the current domain
+			if (destinationDomain){
+				this.destinationDomain = destinationDomain;
+			} else {
+				this.destinationDomain = this.variables.domain;
+				if (this.destinationDomain.indexOf(".com") < this.destinationDomain.lastIndexOf(".")){
+					this.destinationDomain = this.destinationDomain.str.substring(0, this.destinationDomain.lastIndexOf(".")) + ".com";
+				}
+			}
+
+
+			if(callback == null){
+				this.callback = function(){};
+			} else {
+				this.callback = callback;
+			}
+
+			// Flag if enforced setting a facilitator id on all links of the current site directed at the destinationDomain
+			// Only allow forwarding if destinationDomain differs from current
+			if (facilitatorForwarding && this.destinationDomain != this.variables.domain){
+				this.facilitatorForwarding = facilitatorForwarding;
+			}
+
+			// Allow overriding of most init arguments in Markup
+			var node = window.jQuery("enable-organic-facilitator-tracking");
+			if (node.length > 0){
+				// if specificed in the node, override default values
+				if (node.attr("facilitator") != null){
+					this.facilitatorId = node.attr("facilitator");
+				}
+				if (node.attr("forwarding") != null){
+					this.facilitatorForwarding = (node.attr("forwarding") == "true");
+				}
+				if (node.attr("action") != null){
+					this.variables.action = node.attr("action");
+				}
+				if (node.attr("expires") != null){
+					this.variables.expires = node.attr("expires");
+				}
+				if (node.attr("domain") != null){
+					this.destinationDomain = node.attr("domain");
+				}
+			}
+		},
+		mark:function(){
+			var match = null;
+			var applyMark = this.hasReferrer;
+
+			// Verify if the current path allows for an organic facilitator id to be set in the first place
+			if (applyMark && this._classification_should_run(this.variables.domain, this.variables.refDomain)){
+
+				if (this.variables.args["csref"]!=null){
+					applyMark = false;
+				}else if (this.variables.args["s_cid"]!=null){
+					applyMark = false;
+				}
+
+				// Check if a facilitator id is availabe in the URL
+				else if (this.variables.args["facilitatorId"]!=null){
+					applyMark = false;
+				}
+				else if (this.variables.args["facilitator"]!=null){
+					applyMark = false;
+				}
+			}
+
+			// Kill a local CSOSEO if URL contains external campaign id
+			var killCSOSEO = false;
+			if ((this.variables.args["csref"]!=null)
+				|| (this.variables.args["s_cid"]!=null)
+				|| (this.variables.args["facilitatorId"]!=null && "CSOSEO" != this.variables.args["facilitatorId"])
+				|| (this.variables.args["facilitator"]!=null && "CSOSEO" != this.variables.args["facilitator"])){
+				killCSOSEO = true;
+			}
+			if (killCSOSEO && this.destinationDomain != this.variables.domain){
+				if (this._readCookie("facilitator-id") == "CSOSEO"){
+					this._deleteCookie("facilitator-id");
+				}
+			}
+
+			// Check if a specific piece of markup is in the HTML
+			// We rely on jQuery being present, otherwise assuming the tag is there
+			/*
+			if (applyMark){
+				if (window.jQuery){
+					var node = window.jQuery("enable-organic-facilitator-tracking");
+					applyMark = (node.length > 0);
+				}
+			}
+			*/
+
+			// Match the referrer to the classifiaction list
+			if (applyMark){
+				match = this._ref_matches(this.variables.refDomain, this.config.classification.refs);
+				applyMark = (match != null);
+			}
+
+			var success = false;
+			// If all these things are true, match the referrer URL with the classification.
+			if (applyMark && match != null){
+
+				var _this = this;
+				// !! 	SET THE FACILITATOR COOKIE
+				var success = this._setFacilitator(match, function(){
+			    	_this.callback(false);
+				});
+			}
+
+
+			// Only forward CSOSEO and on non-.com domain
+			if (this.destinationDomain != this.variables.domain){
+				this._forwardFacilitator();
+			}
+			return success;
+		},
+
+		_reset:function(){
+			delete this.variables;
+			delete this.destinationDomain;
+			delete this.callback;
+			this.hasReferrer = false;
+			this.facilitatorForwarding = false;
+			this.facilitatorId = "CSOSEO";
+		},
+
+		_ref_matches:function(ref, sources){
+			for(var i = 0;i<sources.length;i++){
+				var source = sources[i];
+				for(var i2 = 0;i2<source.patterns.length;i2++){
+					if(ref.indexOf(source.patterns[i2])>-1){
+						return source;
+					}
+				}
+			}
+		},
+
+		_classification_should_run:function(domain,referrer){
+			//extract the domain name without www prefix or tld
+			var regexDomain = domain.replace(/^(www\.)?([^\.]*).*/g,'$2');
+			if(referrer&&referrer.indexOf(regexDomain)>-1){
+				return false;
+			}
+			return true;
+		},
+
+		_setFacilitator:function(match, failCallback){
+			this.facilitatorSet=true;
+
+			if (this.destinationDomain != this.variables.domain){
+				// Local non-.com session cookie
+				this._setCookie("facilitator-id", this.facilitatorId, 0);
+				
+				var urlPrefix = this.protocol+'://'+this.destinationDomain;
+				if (this.variables.action != null&&urlPrefix!=document.location.protocol+'//'+document.location.hostname){
+					var _callback = this.callback;
+					var url = urlPrefix+this.variables.action+'?jsoncallback=?';
+					var data = {
+					    	c_facilitator:this.facilitatorId,
+					    	d:this.destinationDomain,
+					    	t_facilitator:this.variables.expires
+					    };
+					jQuery.getJSON( url , data)
+						.done(function(response) {
+							if (data == null || response == "false" || !response){
+								failCallback();
+						    } else {
+						    	_callback(true);
+						    	//cleans up the cookie, if it's in place on the core domain
+						    	//_this._setCookie("facilitator-id",null,-1);
+						    }
+						})
+						.fail(function() {
+							failCallback();
+						});
+					return true;
+				}
+			} else {
+				// Store current cookie if not CSOSEO
+				var currentCookie = this._readCookie("facilitator-id");
+				if (currentCookie != null && currentCookie != this.facilitatorId){
+					this._setCookie("last-facilitator-id", currentCookie, this.variables.expires);
+				}
+
+				this._setCookie("facilitator-id", this.facilitatorId, this.variables.expires);
+				this._setCookie("facilitator",null,-1);
+
+				return true;
+			}
+
+			return false;
+		},
+
+		_setCookie:function(name, value, exp){
+			var d = new Date();
+			d.setTime(d.getTime() + (exp*24*60*60*1000));
+			var expires = "expires="+d.toUTCString() + ";";
+			if (exp == 0) expires = "";
+			var opts = '';
+			// Build list of domain
+			var dotCount = (document.location.host.match(/\./g) || []).length;
+			if (dotCount > 1 && ((document.location.host.indexOf(".co.") < 0) || dotCount > 2)) {
+				opts = ";domain=" + document.location.host.substring(document.location.host.indexOf("."));
+			}
+			var cString = name+"=" + value+"; " + expires+"path=/"+opts;
+			document.cookie = cString;
+		},
+		
+		_readCookie:function(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1,c.length);
+				if (c.indexOf(nameEQ) == 0) {
+					return c.substring(nameEQ.length,c.length);
+				}  
+			}
+			return null;
+		},
+
+		_deleteCookie:function( name ) {
+			var opts = '';
+			// Build list of domain
+			var dotCount = (document.location.host.match(/\./g) || []).length;
+			if (dotCount > 1 && ((document.location.host.indexOf(".co.") < 0) || dotCount > 2)) {
+				opts = ";domain=" + document.location.host.substring(document.location.host.indexOf("."));
+			}
+			document.cookie = name+"=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/"+opts;
+ 		},
+
+		_forwardFacilitator: function(){
+			
+			// Requires jQuery
+			if (window.jQuery){
+				var _this = this;
+
+				var facilitator = _this._readCookie('facilitator-id');
+				if(!facilitator){
+					facilitator = _this._readCookie('facilitator');
+				}
+
+				jQuery(document).ready(function(){
+					// Find all the links on the page pointing to the destinationDomain
+					if(facilitator){
+						var links = window.jQuery("a[href*='" + _this.destinationDomain + "']");
+						window.jQuery.each(links, function(index, entry){
+							if (entry.href.indexOf(_this.destinationDomain) <= 8){
+								var uri = _this._updateQueryStringParameter(entry.href, "facilitatorId", facilitator);
+								if (uri != null && uri.length > 0){
+									entry.href = uri;
+								}
+							}
+						});
+						
+						var forms = window.jQuery("form");
+						window.jQuery.each(forms, function(index, entry){
+							var action = jQuery(entry).attr('action');
+							if(action && action.indexOf(_this.destinationDomain) >- 1 ){
+							    _this._updateFormParameter(entry, "facilitatorId", facilitator);
+							}
+						});
+					}
+				});
+			}
+		},
+
+		_updateQueryStringParameter: function(uri, key, value) {
+			var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+			var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+			if (uri.match(re)) {
+				return uri.replace(re, '$1' + key + "=" + value + '$2');
+			} else {
+				return uri + separator + key + "=" + value;
+			}
+		},
+
+		_updateFormParameter: function(form, key, value){
+			if (window.jQuery){
+				var facilitatorInput = window.jQuery(form).find("input[name='" + key + "']");
+				if (facilitatorInput.length > 0){
+					facilitatorInput.attr("value", value);
+				} else {
+					jQuery("<input type='hidden' name='" + key + "' value='" + value +"' />").appendTo(form);
+					
+				}
+			}
+		}
+	}
+
+	if(window.oft_onload){
+		window.oft_onload();
+	}
+}

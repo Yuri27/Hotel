@@ -1,0 +1,256 @@
+#bl1{
+  position: relative;
+  /*height: 235px;*/
+  width: 50%;
+
+  top: 20px;
+  left: 0px;
+
+  /*background: yellow;*/
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+#bl2{
+  width: 50%; 
+  /*vertical-align: bottom;*/
+  /*height: 186px;*/
+  /*margin-top: -166px;*/
+  /*background: green;*/
+  position: relative;
+  left: 400px;
+  top: -202px; 
+  /*margin-left: 529px; 595px; если #user_login width: 80%;/*/
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+textarea{  
+  overflow-y: scroll;
+  padding:10px;
+  width:250px;
+  font-size:14px;
+  margin: 0px auto;
+  position: relative;
+}
+label[for="cat"] {
+  display: block;
+  position: relative;
+  margin-left: 20px;
+  text-align: left; 
+}
+label[for="cat1"] {
+  position: absolute;
+  margin-top: -23px;
+}
+.category{
+	margin-top: 10px;
+	text-align: center;
+	width:100%;
+	/*height: 30px;*/
+}
+.category td{
+	height: 100%;
+}
+.category input, .category textarea{
+	background: none;
+	border: none;
+}
+
+.category input:hover,.category textarea:hover{
+	cursor: text;
+}
+
+.category input:focus,.category textarea:focus{
+	border: 2px double black;
+}
+
+#about {
+  display: block;
+  max-width: 900px;
+  min-width: 300px;
+  margin: 0 auto;
+  padding: 2px 3px;
+}
+#about h1 {
+  font-family: 'Oswald', 'Trebuchet MS', Helvetica, sans-serif;
+  font-size: 1.95em;
+  line-height: 1.25em;
+  margin-bottom: 12px;
+  text-align: right;
+}
+
+.slidernav{
+  display: block;
+  text-align: center;
+}
+
+.slidernav a {
+  display: inline-block;
+  padding: 5px 8px;
+  margin-right: 8px;
+  font-size: 1.4em;
+  background: #fff;
+  color: #666;
+  text-decoration: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+.slidernav a:active {
+  -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+/** clearfix **/
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix { display: inline-block; }
+ 
+html[xmlns] .clearfix { display: block; }
+* html .clearfix { height: 1%; }
+
+.cat_div {
+  width: 800px; 
+  height: 400px; /* Размеры должны быть фиксированы */
+  border-radius: 5px;
+  border: 3px #777777 solid;
+  /*background: #fff;*/
+  background-image: url(../images/bg2.png);
+  position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+  top: 25%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+  left: 38%; /* половина экрана слева */
+  margin-top: -300px;
+  margin-left: -250px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+  display: none; /* в обычном состоянии окна не должно быть */
+  opacity: 0; /* полностью прозрачно для анимирования */
+  z-index: 10; /* окно должно быть наиболее большем слое */
+  padding: 20px 0px;
+  text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.cat_close {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  cursor: pointer;
+  display: block;
+  /*background: #fc0;*/
+  outline: 2px solid #000; /* Чёрная рамка */
+  border: 3px solid #fff; /* Белая рамка */
+  border-radius: 5px; /* Радиус скругления */
+}
+.cat_close:hover{
+  background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+.ser_div {
+  width: 800px; 
+  height: 400px; /* Размеры должны быть фиксированы */
+  border-radius: 5px;
+  border: 3px #777777 solid;
+  /*background: #fff;*/
+  background-image: url(../images/bg2.png);
+  position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+  top: 25%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+  left: 38%; /* половина экрана слева */
+  margin-top: -300px;
+  margin-left: -250px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+  display: none; /* в обычном состоянии окна не должно быть */
+  opacity: 0; /* полностью прозрачно для анимирования */
+  z-index: 10; /* окно должно быть наиболее большем слое */
+  padding: 20px 0px;
+  text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.ser_close {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  cursor: pointer;
+  display: block;
+  /*background: #fc0;*/
+  outline: 2px solid #000; /* Чёрная рамка */
+  border: 3px solid #fff; /* Белая рамка */
+  border-radius: 5px; /* Радиус скругления */
+}
+.ser_close:hover{
+  background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+/* Подложка */
+#overlay {
+  z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+  position: fixed; /* всегда перекрывает весь сайт */
+  background-color: #000; /* черная */
+  opacity: 0.7; /* но немного прозрачна */
+  width: 100%; 
+  height: 100%; /* размером во весь экран */
+  top: 0; 
+  left: 0; /* сверху и слева 0, обязательные свойства! */
+  cursor: pointer;
+  display: none; /* в обычном состоянии её нет) */
+}
+.cat_div select{
+  background-size: 30px 30px;  
+  background-repeat: no-repeat; /*Убираем повтор изображения*/   
+  background-position: 0px; /*Позиционируем*/   
+  background-color: #f3f3f3;
+  /*border: 1px solid #777777;*/
+  border-radius: 8px;
+  height: 36px;
+  width: 300px;
+  color: #333;
+  border: 2px #777777 solid;
+  font-size: 20px;
+}
+
+.cat_div input{
+  background-size: 30px 30px;  
+  background-repeat: no-repeat; /*Убираем повтор изображения*/   
+  background-position: 0px; /*Позиционируем*/   
+  background-color: #f3f3f3;
+  /*border: 1px solid #777777;*/
+  border-radius: 8px;
+  height: 30px;
+  width: 370px;
+  color: #333;
+  border: 2px #777777 solid;
+  font-size: 20px;
+}
+
+#cat-btn{
+  position: relative;
+  bottom: 150px;
+  height: 36px;
+  width: 150px;
+  border: 1px solid #e7e7e7;
+  /*background: #1b1b84;*/
+  background: rgba(27,27,132,0.9);/*цвет и прозрачность окна*/
+  color: #FFF;
+  /*margin-left:35%;*/
+  /*margin-left: 34.5%;*/
+  cursor: pointer;
+  border: 0px;
+  text-align: center;
+  font-size: 24px;
+}
+
+#cat-btn:hover{
+  background: rgba(3,3,183,1);/*цвет и прозрачность окна*/
+}
+
+.cat_div h3{
+  font-size: 24px;
+  color: #1f1ff2;
+  margin-top: 10px;
+}
+

@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0368)https://5273478.fls.doubleclick.net/activityi;dc_pre=COvI1Jm-3dMCFQVPGAodBE8F_g;src=5273478;type=retar0;cat=retar0;u1=UA;u2=RADSAS;u3=ru;u4=IEVZH;u32=IEVZH;u33=IEVZH;u5=Radisson%20Blu%20Hotel%2C%20Kyiv;u20=BIGMOUTHMEDIAREZIDOR;u21=ppc_g_cr_sk_ua_cl_brand;u22=UA;u23=radisson-hotels-Ukraine%3Eievzh-frontpage;u26=%D0%9A%D0%B8%D0%B5%D0%B2;u31=false;ord=4690589987738.876 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title></head><body style="background-color: transparent"><script src="./435361056806878" async=""></script><script async="" src="./fbevents.js.завантаження"></script><script>
+var loggedOn = "false";
+if (loggedOn=='true') {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '435361056806878');
+    fbq('track', 'Lead', {
+        content_name: 'Logged On',
+        content_category: 'true'
+    });
+}
+</script><script>
+function mSetCookie(e, t, i) {
+    var Z = new Date;
+    Z.setTime(Z.getTime() + 24 * i * 60 * 60 * 1e3);
+    var r = "expires=" + Z.toUTCString();
+    document.cookie = e + "=" + t + ";" + r + ";path=/" }
+
+function mGetCookie(e) {
+    for (var t = e + "=", i = document.cookie.split(";"), Z = 0; Z < i.length; Z++) {
+        for (var r = i[Z];
+            " " == r.charAt(0);) r = r.substring(1);
+        if (0 == r.indexOf(t)) return r.substring(t.length, r.length) }
+    return "" }
+
+function dropOldHotels(e, t) {
+    var i = (new Date).getTime();
+    for (key in e) {
+        (i - e[key] > 2592e6 || t.indexOf(key) == -1) && delete e[key] }
+    return e }
+
+function getLastVisitedHotels(e, t) {
+    for (var i = []; 0 !== t;) {
+        var Z = 0,
+            r = 0;
+        for (var d in e) e[d] > r && (Z = d, r = e[d]);
+        delete e[Z], i.push(Z), t -= 1 }
+    return i }
+
+function testfunction(e, t) {
+    var i = (new Date).getTime(),
+        Z = mGetCookie(e);
+    if ("" == Z || void 0 == Z) Z = {}, Z[hotelcode] = i, mSetCookie(e, JSON.stringify(Z), 30);
+    else { Z = JSON.parse(Z), Z[hotelcode] = i;
+        var Z = dropOldHotels(Z, t);
+        mSetCookie(e, JSON.stringify(Z), 30) }
+    return Z }
+
+function fbPush(hotelArr, nrHotelsVisited) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '435361056806878'); // Insert your pixel ID here.
+    fbq('track', 'ViewContent', { 
+        content_type: 'hotel view',
+        content_ids: hotelArr,
+        content_category: nrHotelsVisited
+    });
+
+}
+
+function pushSegment(e, t) {
+    var i = Math.random() + "",
+        Z = 1e13 * i,
+        r = Object.keys(t).length;
+    switch (e) {
+        case "radisson":
+            if (1 === r) {
+                var d = getLastVisitedHotels(t, 1);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=radisblu;u34=onehotelvisitedRadisson;u40=" + d[0] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0]],'onehotelvisitedRadisson');
+            } 
+            else if (2 === r) {
+                var d = getLastVisitedHotels(t, 2);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=radisblu;u34=twohotelsvisitedRadisson;u40=" + d[0] + ";u38=" + d[1] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0],d[1]],'twohotelsvisitedRadisson');
+
+            } else if (r >= 3) {
+                var d = getLastVisitedHotels(t, 3);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=radisblu;u34=threehotelsvisitedRadisson;u40=" + d[0] + ";u38=" + d[1] + ";u39=" + d[2] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0],d[1],d[2]],'threehotelsvisitedRadisson');
+                 }
+            break;
+        case "parkin":
+            if (1 === r) {
+                var d = getLastVisitedHotels(t, 1);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=parkinn;u34=onehotelvisitedParkin;u41=" + d[0] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0]],'onehotelvisitedParkin');
+            } else if (2 === r) {
+                var d = getLastVisitedHotels(t, 2);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=parkinn;u34=twohotelsvisitedParkin;u41=" + d[0] + ";u42=" + d[1] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0],d[1]],'twohotelsvisitedParkin');
+            } else if (r >= 3) {
+                var d = getLastVisitedHotels(t, 3);
+                (new Image).src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=parkinn;u34=threehotelsvisitedParkin;u41=" + d[0] + ";u42=" + d[1] + ";u43=" + d[2] + ";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + Z + "?";
+                fbPush([d[0],d[1],d[2]],'threehotelsvisitedParkin');
+            } 
+    }
+}
+
+function checkAudienceCookie(e) {
+    var t = "AARZH,AERZB,AERZI,AERZK,AESZH,AMSZH,AMSZQ,ARNZB,BEGZH,BERZA,BFSZH,BGOZH,BHXZH,BRSZH,BSLZH,BTSZH,BUHZH,BUSZH,CEKZH,CGNZR,CPHZA,CPHZH,CWLZH,DUBZA,DUBZC,DUBZH,DUBZQ,DUSZH,DUSZR,EDIZA,EMAZQ,EVNZR,FKBZH,FRAZR,GDNZH,GLAZH,GOTZA,GOTZB,GWYZA,GWYZH,HAJZR,HAMZA,HAMZQ,IEVZH,IEVZP,IFOZR,JERZR,JHEZD,KGDZH,KLJZH,KRKZH,KRSZR,LBAZH,LEDZH,LEDZS,LMKZR,LONZA,LPLZH,LTRZH,MANZQ,MILZD,MMAZH,MOWZA,MOWZB,MOWZH,MOWZK,MOWZZ,ODEZH,ORKZR,OSLZA,OSLZE,OSLZH,OSLZQ,OSLZR,OSLZX,PRGZH,QLJZH,REKZH,REKZR,RIXZE,RIXZH,RIXZL,RIXZR,SPUZR,STNZQ,STOZH,STOZQ,STOZR,STOZS,STOZW,SVGZA,SVGZH,SVOZQ,SXLZH,TASZH,TBSZH,TLLZH,TLLZR,TOSZH,TRDZH,TRDZQ,TSEZH,VIEZS,VNOZH,VNOZL,WAWZH,WAWZS,WROZH,XAHZH,XVUZH,ZRHZQ,TASZH,ANKZH,ISTZB,ISTZH,ISTZQ,ISTZU,ISTZI,IZMZC,ISTZS,ISTZG,ASRZR,ISTZA,ALYZR,AUHZY,BAHZH,BEYZR,CAIZH,DHAZS,DMMZR,DOHZH,DXBZA,DXBZR,DXBZS,GIZZR,HRGZR,JEDZH,JEDZS,JEDZZ,KWIZH,MCTZH,MCTZS,RKTZR,RUHZH,SHJZR,SSHZH,TIPZR,YNBZH";
+    var i = "ARNP2,REKPQ,HAUPD,STOP2,SVGP1,ZGKPD,MMAPD,OSLPD,OSLPE,OSLPQ,STOPS,XGCPD,ABZPD,BFSPD,BHXP2,BHXPD,CWLPD,CWLPJ,DCSPD,GLAPD,LCYPD,LHRPQ,LTNP2,MANPC,NQTPD,ORMPD,QQYPD,SENPD,SNNPQ,STNPD,XVHPD,XVWPD,AMSPQ,BTSPD,BUHPD,FRAPQ,KRKPD,LNZPD,MUCP1,MUCP2,NUEPD,OSRPD,PRGPD,STRPD,ZDJP1,ZRHP1,AERPD,AERPK,ASFPD,BAKPD,DOKPD,IARPD,IJKPD,KUNPR,KZNPB,LEDP2,LEDPD,LEDPN,LEDPQ,MMKPD,MOWPD,NOZPD,NVRPD,OVBPD,PESPD,RIXPR,SVOPD,SVXPD,SVXPT,TLLPM,TLLPR,TSEPD,VKOPO,VOGP2,ANRPD,BRUPM,LGGPQ,LILPD,NCEP1,ZGKPD,QDMPD,SSHPD,MCTPD,JNJPD,DXBPR,DXBPA,DHAPD,AUHPY,ISTPQ";
+    if (t.indexOf(e) > -1) {
+        var Z = testfunction("__dcohotelradisson", t);
+        pushSegment("radisson", Z) } else if (i.indexOf(e) > -1) {
+        var Z = testfunction("__dcohotelparkin", i);
+        pushSegment("parkin", Z) } }
+var hotelcode = "IEVZH";
+"" !== hotelcode && "undefined" !== hotelcode && checkAudienceCookie(hotelcode);
+</script><script>
+
+var axel = Math.random() + "";
+var a = axel * 10000000000000;
+    
+function mSetCookieParkInn(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function mGetCookieParkInn(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function mCheckThreeParkInn() {
+    var hotelrot = [mGetCookieParkInn("dcocodelist3")];
+    
+    var dcoRetargetingHotels = "ARNP2, REKPQ, HAUPD, STOP2, SVGP1, ZGKPD, MMAPD, OSLPD, OSLPE, OSLPQ, STOPS, XGCPD, ABZPD, BFSPD, BHXP2, BHXPD, CWLPD, CWLPJ, DCSPD, GLAPD, LCYPD, LHRPQ, LTNP2, MANPC, NQTPD, ORMPD, QQYPD, SENPD, SNNPQ, STNPD, XVHPD, XVWPD, AMSPQ, BTSPD, BUHPD, FRAPQ, KRKPD, LNZPD, MUCP1, MUCP2, NUEPD, OSRPD, PRGPD, STRPD, ZDJP1, ZRHP1, AERPD, AERPK, ASFPD, BAKPD, DOKPD, IARPD, IJKPD, KUNPR, KZNPB, LEDP2, LEDPD, LEDPN, LEDPQ, MMKPD, MOWPD, NOZPD, NVRPD, OVBPD, PESPD, RIXPR, SVOPD, SVXPD, SVXPT, TLLPM, TLLPR, TSEPD,VKOPO,VOGP2,ANRPD,BRUPM,LGGPQ,LILPD,NCEP1,ZGKPD";
+    //if hotelcode is part of the list of hotels we want to retarget, the function continues
+    if (dcoRetargetingHotels.indexOf(mPage) !== -1) {
+        // if no cookie exist, the hotel code is passed a value
+        if (hotelrot == "") {
+            mSetCookieParkInn("dcocodelist3", mPage, 30);
+        }
+
+        else if (mGetCookieParkInn("dcocodelist3").indexOf(mPage) > -1) {
+            //no new hotel code
+        }
+        // if a new hotel code is detected, it is added to the cookie
+        else {
+            hotelrot.push(mPage);
+            mSetCookieParkInn("dcocodelist3", hotelrot, 30);
+        }
+
+        // If one hotel code is available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        if (mGetCookieParkInn("dcocodelist3").split(",").length == 1) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=Parkinn1visited;u3="+pLanguage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+            new Image().src = "https://secure.adnxs.com/seg?add=7207494&t=2";
+        }
+
+        // If two hotel codes are available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        else if (mGetCookieParkInn("dcocodelist3").split(",").length == 2) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=Parkinn2visited;u3="+pLanguage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+        }
+
+        // If three or more hotel codes are available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        else if (mGetCookieParkInn("dcocodelist3").split(",").length >= 3) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=Parkinn3visited;u3="+pLanguage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+            new Image().src="https://secure.adnxs.com/seg?add=7207495&t=2";
+        }
+    }
+}
+var mPage = 'IEVZH';
+var pLanguage = 'ru';
+if (mPage != "") {
+    mCheckThreeParkInn()
+}
+</script><script type="text/javascript">
+var sPage = 'radisson-hotels-Ukraine%3Eievzh-frontpage';
+
+
+if (sPage.indexOf("rateSearchResultsPage") > -1) {
+    var sDate = '',
+    sDateDecode = decodeURIComponent(sDate),
+    dateParts = sDateDecode.split("/"),
+    sYear = dateParts[2],
+    sMonth = dateParts[0],
+    sMonth = sMonth[0]==="0" ? sMonth[1] : sMonth,
+    sDate = dateParts[1],
+    sCountry = 'UA',
+    sLanguage = 'ru',
+    sRooms = '',
+    sAdults = '',
+    sChildren = '',
+    sNights = '',
+    sHotelCountry = 'UA',
+    sHotelCity = '%D0%9A%D0%B8%D0%B5%D0%B2',
+    searchString = 'ucountry:'+sCountry+',language:'+sLanguage+',rooms:'+sRooms+',adults:'+sAdults+',children:'+sChildren+',nights:'+sNights+',hcountry:'+sHotelCountry+',hcity:'+sHotelCity;
+
+    sDate = sDate[0]==="0" ? sDate[1] : sDate,
+    departureDate = new Date(sYear,sMonth-1,sDate),
+    oneDay = 864e5,
+    currentDate = new Date(),
+    diffDays = Math.round(Math.abs((currentDate.getTime() - departureDate.getTime()) / oneDay));
+
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '435361056806878'); // Insert your pixel ID here.
+    fbq('track', 'Search', { 
+        search_string: searchString,
+        content_category: 'Hotel Search days: '+diffDays
+    });
+
+    if (diffDays == 1) {
+        ((new Image).src = "https://secure.adnxs.com/seg?add=5426187&t=2");
+    } else if (diffDays >= 2 && 3 >= diffDays) {
+        ((new Image).src = "https://secure.adnxs.com/seg?add=5426188&t=2");
+    } else if (diffDays >= 4 && 7 >= diffDays) {
+        ((new Image).src = "https://secure.adnxs.com/seg?add=5426191&t=2");
+    } else if (diffDays >= 8) {
+        ((new Image).src = "https://secure.adnxs.com/seg?add=5426192&t=2");
+    }
+}
+</script><script>
+
+var axel = Math.random() + "";
+var a = axel * 10000000000000;
+    
+function mSetCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function mGetCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function mCheckThree() {
+    var hotelrot = [mGetCookie("dcocodelist2")];
+    
+    var dcoRetargetingHotels = "AARZH,AERZB,AERZI,AERZK,AESZH,AMSZH,AMSZQ,ARNZB,BEGZH,BERZA,BFSZH,BGOZH,BHXZH,BRSZH,BSLZH,BTSZH,BUHZH,BUSZH,CEKZH,CGNZR,CPHZA,CPHZH,CWLZH,DUBZA,DUBZC,DUBZH,DUBZQ,DUSZH,DUSZR,EDIZA,EMAZQ,EVNZR,FKBZH,FRAZR,GDNZH,GLAZH,GOTZA,GOTZB,GWYZA,GWYZH,HAJZR,HAMZA,HAMZQ,IEVZH,IEVZP,IFOZR,JERZR,JHEZD,KGDZH,KLJZH,KRKZH,KRSZR,LBAZH,LEDZH,LEDZS,LMKZR,LONZA,LPLZH,LTRZH,MANZQ,MILZD,MMAZH,MOWZA,MOWZB,MOWZH,MOWZK,MOWZZ,ODEZH,ORKZR,OSLZA,OSLZE,OSLZH,OSLZQ,OSLZR,OSLZX,PRGZH,QLJZH,REKZH,REKZR,RIXZE,RIXZH,RIXZL,RIXZR,SPUZR,STNZQ,STOZH,STOZQ,STOZR,STOZS,STOZW,SVGZA,SVGZH,SVOZQ,SXLZH,TASZH,TBSZH,TLLZH,TLLZR,TOSZH,TRDZH,TRDZQ,TSEZH,VIEZS,VNOZH,VNOZL,WAWZH,WAWZS,WROZH,XAHZH,XVUZH,ZRHZQ,TASZH";
+    //if hotelcode is part of the list of hotels we want to retarget, the function continues
+    if (dcoRetargetingHotels.indexOf(mPage) !== -1) {
+        // if no cookie exist, the hotel code is passed a value
+        if (hotelrot == "") {
+            mSetCookie("dcocodelist2", mPage, 30);
+        }
+
+        else if (mGetCookie("dcocodelist2").indexOf(mPage) > -1) {
+            //no new hotel code
+        }
+        // if a new hotel code is detected, it is added to the cookie
+        else {
+            hotelrot.push(mPage);
+            mSetCookie("dcocodelist2", hotelrot, 30);
+        }
+
+        // If one hotel code is available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        if (mGetCookie("dcocodelist2").split(",").length == 1) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=onehotelvisited;u3="+pLanguage+";u4="+mPage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+            new Image().src = "https://secure.adnxs.com/seg?add=7207494&t=2";
+        }
+
+        // If two hotel codes are available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        else if (mGetCookie("dcocodelist2").split(",").length == 2) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=twohotelsvisited;u3="+pLanguage+";u4="+mPage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+        }
+
+        // If three or more hotel codes are available in the cookie, it fires the DCM floodligt, with the u5 value as TRUE - and then you can just create an audience with that condition.
+        else if (mGetCookie("dcocodelist2").split(",").length >= 3) {
+            new Image().src = "https://5273478.fls.doubleclick.net/activityi;src=5273478;type=retar0;cat=retar0;u34=threehotelsvisited;u3="+pLanguage+";u4="+mPage+";u35="+mPage+";u36="+mPage+";u37="+mPage+";dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;ord=" + a + "?";
+            new Image().src="https://secure.adnxs.com/seg?add=7207495&t=2";
+        }
+    }
+}
+var mPage = 'IEVZH';
+var pLanguage = 'ru';
+if (mPage != "") {
+    mCheckThree();
+}
+</script><script>
+var mPage = 'IEVZH';
+if (mPage.indexOf('parzb') >-1 ){
+new Image().src = 'https://secure.adnxs.com/seg?add=6313050&t=2';
+}
+</script>
+<script>
+var mPage = 'IEVZH';
+if (mPage.indexOf('helzs') >-1 || mPage.indexOf('helzb') >-1 || mPage.indexOf('helzr') >-1 || mPage.indexOf('helzh') >-1 || mPage.indexOf('oulzh') >-1){ 
+new Image().src = 'https://secure.adnxs.com/seg?add=4176977&t=2';
+}
+</script></body></html>

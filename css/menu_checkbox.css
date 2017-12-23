@@ -1,0 +1,31 @@
+/*скрываем наше меню и checkbox*/
+.menu, #go {
+	display: none;
+	text-decoration: none;
+	width: 250px;
+	position: absolute;
+	/*left: 270px;*/
+	top: 80px;
+
+}
+
+/*стилизуем кнопочку*/
+.st {
+	padding: 0px 0px -50px 0px;
+	text-align: center;
+	/*background: url(../images/menu.png);*/
+	cursor: pointer;
+	color: black;
+}
+
+/*а вот собственно и само действие*/
+#go:checked ~ .menu {
+	display: block;
+	list-style: none;
+	font-size: 20px;
+}
+
+.menu :hover {
+	background-color: #f46758;
+	color: #333;
+}

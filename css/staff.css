@@ -1,0 +1,190 @@
+#save_btn{
+	/*position: relative;*/
+	display: block;
+	float: right;
+	width: 108px;
+}
+#save_btn:hover{
+	cursor: pointer; 
+}
+
+#refresh_btn{
+	/*position: relative;*/
+	display: block;
+	float: right;
+	width: 108px;
+	margin-top: -10px;
+}
+#refresh_btn:hover{
+	cursor: pointer; 
+}
+
+#blok_1 { 
+	position: relative;
+	/*height: 235px;*/
+	width: 50%;
+
+	/*top: 20px;*/
+	left: 0px;
+
+	/*background: yellow;*/
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+#blok_2 { 
+	width: 50%;	
+	/*vertical-align: bottom;*/
+	/*height: 186px;*/
+	/*margin-top: -166px;*/
+	/*background: green;*/
+	position: relative;
+	left: 400px;
+	top: -256px; 
+	/*margin-left: 529px; 595px; если #user_login width: 80%;/*/
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+
+
+.insert_staff{
+	margin-top: 20px;
+	width: 100%;
+	height: 100px;
+	background: #eee8e8;
+}
+
+
+label[for="staff"] {
+	display: block;
+	font-size: 16px;
+	color: #b2b2b2;
+	text-align: left;
+	margin-left: 15px;  
+	/*margin-top: 50px;*/
+}
+label[for="staff1"] {
+	display: block;
+	font-size: 16px;
+	color: #b2b2b2;
+	text-align: left;
+	margin-left: 210px;  
+	margin-top: -59px;
+}
+
+
+.staff_div {
+	width: 800px; 
+	height: 400px; /* Размеры должны быть фиксированы */
+	border-radius: 5px;
+	border: 3px #777777 solid;
+	/*background: #fff;*/
+	background-image: url(../images/bg2.png);
+	position: fixed; /* чтобы окно было в видимой зоне в любом месте */
+	top: 25%; /* отступаем сверху 45%, остальные 5% подвинет скрипт */
+	left: 38%; /* половина экрана слева */
+	margin-top: -300px;
+	margin-left: -250px; /* тут вся магия центровки css, отступаем влево и вверх минус половину ширины и высоты соответственно =) */
+	display: none; /* в обычном состоянии окна не должно быть */
+	opacity: 0; /* полностью прозрачно для анимирования */
+	z-index: 10; /* окно должно быть наиболее большем слое */
+	padding: 20px 0px;
+	text-align: center;
+}
+/* Кнопка закрыть для тех кто в танке) */
+.staff_close {
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+	display: block;
+	/*background: #fc0;*/
+	outline: 2px solid #000; /* Чёрная рамка */
+	border: 3px solid #fff; /* Белая рамка */
+	border-radius: 5px; /* Радиус скругления */
+}
+.staff_close:hover{
+	background: red;
+    border-radius: 10px; /* Радиус скругления */
+}
+
+/* Подложка */
+#overlay {
+	z-index: 3; /* подложка должна быть выше слоев элементов сайта, но ниже слоя модального окна */
+	position: fixed; /* всегда перекрывает весь сайт */
+	background-color: #000; /* черная */
+	opacity: 0.7; /* но немного прозрачна */
+	width: 100%; 
+	height: 100%; /* размером во весь экран */
+	top: 0; 
+	left: 0; /* сверху и слева 0, обязательные свойства! */
+	cursor: pointer;
+	display: none; /* в обычном состоянии её нет) */
+}
+.staff_div select{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	/*border: 1px solid #777777;*/
+	border-radius: 8px;
+	height: 36px;
+	width: 300px;
+	color: #333;
+	border: 2px #777777 solid;
+	font-size: 20px;
+}
+
+.staff_div input{
+	background-size: 30px 30px;  
+	background-repeat: no-repeat; /*Убираем повтор изображения*/   
+	background-position: 0px; /*Позиционируем*/   
+	background-color: #f3f3f3;
+	/*border: 1px solid #777777;*/
+	border-radius: 8px;
+	height: 30px;
+	width: 370px;
+	color: #333;
+	border: 2px #777777 solid;
+	font-size: 20px;
+}
+
+#staff-btn{
+	position: relative;
+	bottom: 220px;
+	height: 36px;
+	width: 150px;
+	border: 1px solid #e7e7e7;
+	/*background: #1b1b84;*/
+	background: rgba(27,27,132,0.9);/*цвет и прозрачность окна*/
+	color: #FFF;
+	/*margin-left:35%;*/
+	/*margin-left: 34.5%;*/
+	cursor: pointer;
+	border: 0px;
+	text-align: center;
+	font-size: 24px;
+}
+
+#staff-btn:hover{
+	background: rgba(3,3,183,1);/*цвет и прозрачность окна*/
+}
+
+.staff_div h3{
+	font-size: 24px;
+	color: #1f1ff2;
+	margin-top: -10px;
+}
+
+label[for="login"] {
+	display: block;
+	font-size: 24px;
+	color: #b2b2b2;
+	position: relative;
+	margin-left: 55px;
+	text-align: left; 
+	/*margin-top: 50px;*/
+}

@@ -1,0 +1,60 @@
+
+
+.gallery a img{    
+    /* округления старт */
+    -webkit-border-radius: 25px;
+    -moz-border-radius:  25px;
+    border-radius:  25px;
+    /* округления конец */
+    
+    /* transition старт */
+    -webkit-transition:All 1s ease;
+    -moz-transition:All 1s ease;
+    -o-transition:All 1s ease;
+    transition: all 1.0s ease;
+    /* transition конец */
+    
+    /* Тень старт */
+    -webkit-box-shadow: 0px 2px 4px 1px #DFDFDF;
+    -moz-box-shadow: 0px 2px 4px 1px #DFDFDF;
+    box-shadow: 0px 2px 4px 1px #DFDFDF; 
+    /* Тень конец */
+    
+    /* Прозрачнсоть старт */
+    -moz-opacity: 0.70;
+    opacity: 0.70;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=70);
+    /* Прозрачнсоть конец */
+    
+    margin-right:5px;     /* Отступ справа */
+    padding:10px; /* Внутренние отступы */
+    display:inline-block; /* отображение */
+    height:150px; /* Высота */
+}
+
+.gallery a img:hover{
+    -moz-opacity: 1;
+    opacity: 1;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=100);
+}
+.gallery a:focus img{
+    position: relative;  /* Позиционирование */
+    height:300px; /* Высота */
+    cursor: pointer;    /* Вид курсора */
+    
+    /* transition старт */
+    -webkit-transition:All 1s ease;
+    -moz-transition:All 1s ease;
+    -o-transition:All 1s ease;
+    transition: all 1.0s ease;
+    /* transition конец */
+    
+    /* Тень старт */
+    -webkit-box-shadow: 0px 4px 4px 1px #DFDFDF;
+    -moz-box-shadow: 0px 4px 4px 1px #DFDFDF;
+    box-shadow: 0px 4px 4px 1px #DFDFDF;
+    /* Тень конец */    
+}
+.gallery a{
+    outline:0; border:0;
+}

@@ -1,0 +1,432 @@
+//indication which function scope is being used if external libraries needs to
+//interact with core components
+var CVP_SCOPE = '_cvp';
+var CVP_STORAGE_SCOPE = 'cvp';
+if(!window._cvp){
+	window._cvp = {
+		config:{
+			classification:{
+				'refs':[
+				    {'t':'org','c':'g', 'patterns':['google']},//google referrer
+					{'t':'org','c':'b', 'patterns':['bing']},//bing referrer
+					{'t':'org','c':'yandex', 'patterns':['yandex']},//yandex referrer
+					{'t':'org','c':'ask', 'patterns':['ask']},//ask referrer
+					{'t':'org','c':'yahoo', 'patterns':['r.search.yahoo.com']},//Yahoo referrer
+					{'t':'org','c':'youtube', 'patterns':['youtube']},//Youtube referrer
+					{'t':'soc','c':'f', 'patterns':['facebook','fb.me']},
+					{'t':'soc','c':'l', 'patterns':['linkedin']},
+					{'t':'soc','c':'t', 'patterns':['twitter','t.co']},
+					{'t':'soc','c':'p', 'patterns':['plus.url.google.com']},
+					{'t':'soc','c':'vk', 'patterns':['vk.com','vkontakte.ru']}
+					],
+				'utag_channel':'channel'
+			}
+		},
+		
+		//perform all actions. An optional callback is available and the caller will be notified
+		//once the call is complete and data guaranteed to be available. The callback is primarily
+		//used for test cases, but can also be used to time page level analytics tracking since
+		//it's always guaranteed to return.
+		startup:function(variables, callback, storageSettings){
+			if(!callback)
+				callback=function(){};
+			if(!this.storage){
+				var storageOption = _cvp_ext_config.storage;
+				if('cookie'===storageOption){
+					this.storage = this.cookieStorage;
+				}else if('local'===storageOption){
+					this.storage = this.normalStorage;
+				}else{
+					this.storage = this.remoteStorage;
+					if(storageSettings!=undefined){
+						if(storageSettings.domain!=undefined)
+							_cvp_ext_config.remoteStorage.domain = storageSettings.domain;
+						if(storageSettings.site!=undefined){
+							_cvp_ext_config.remoteStorage.path = _cvp_ext_config.remoteStorage.path.replace('SITE',storageSettings.site);  
+						}
+					}
+				}
+			}
+			var _this = this;
+			this.trafficClassification(variables,function(){
+				_this.setCVPFromURL(function(){
+					_this.completed = true;
+					callback();
+				});
+			});
+		},
+		
+		/*set up the analytics request containing CVP data.
+		data is pulled from the utag and a custom link is triggered
+		this function should be executed after the initial page request has been made
+		*/
+		analytics:function(delay){
+			var _this = this;
+			var timer=setInterval(function(){
+				if(_this.completed===true){
+					clearInterval(timer);
+					var func=function(){
+						var conf = _cvp_ext_config;
+						var aa = s_gi(s_account);
+						var run = false;
+						if(_this.cvpModified&&conf.cvp.cvpEvar!=undefined&&_this.cvp){
+							run = true;
+							aa.linkTrackVars=conf.cvp.cvpEvar;
+							aa[conf.cvp.cvpEvar]=_this.cvp;
+						}
+						if(_this.cvpCombinedModified&&conf.classification.cvpEvarCombined!=undefined&&conf.classification.enable&&_this.cvpCombined){
+							run = true;
+							aa.linkTrackVars=conf.cvp.cvpEvar+','+conf.classification.cvpEvarCombined;
+							aa[conf.classification.cvpEvarCombined]=_this.cvpCombined;
+						}
+						if(run)aa.tl(this, 'o', 'cvp');
+					};
+					if(delay){
+						setTimeout(func, delay);
+					}else{
+						func();
+					}
+				}
+			},200);
+			
+		},
+		
+		trafficClassification:function(variables,classificationCallback){
+			if(!variables){
+				variables = {
+					search:location.search,
+					userAgent:navigator.userAgent,
+					ref:document.referrer,
+					domain:location.hostname
+				};
+			}
+			if(variables.ref){
+				var a = document.createElement("a");
+				a.href = variables.ref;
+				variables.refDomain = a.hostname;
+			}
+			if(!this._classification_should_run(variables.domain, variables.refDomain)){
+				if(classificationCallback!=undefined){
+					classificationCallback();
+				}
+				return;
+			}
+			var match = null;
+			if(!variables.search||variables.search.indexOf("csref")==-1){
+				var ref = variables.ref;
+				if(ref){
+					match = this._ref_matches(ref, this.config.classification.refs);
+				}
+				if(!match){
+					//lets try and detect based on user agent. It must contain AppleWekBit and FBAN
+					var userAgent = variables.userAgent;
+					if(userAgent.indexOf('AppleWebKit')>-1&&userAgent.indexOf('FBAN')>-1){
+						match = {'t':'soc','c':'fm'};
+					}
+				}
+				if(!match&&ref){
+					//lets track a direct visit
+					var tmp = document.createElement ('a');
+					tmp.href = ref;
+					match = {'t':'ref','c':tmp.hostname};
+				}else if(!match){
+					match = {'t':'dir','c':'direct'};
+				}
+				
+			}else{
+				match = {'t':'paid', 'c':'csref'};
+			}
+			if(match){
+				var cClassification = utag_data.c_classification;
+				if(!cClassification){cClassification = 'na';}
+				this.classification = 'ref|'+match.t+'_'+match.c+'_na_'+cClassification;
+				this.channel = match.t+'|'+match.c;
+				var classificationConfig = _cvp_ext_config.classification;
+				utag_data[classificationConfig.utag_classification] = this.classification;
+				utag_data[classificationConfig.utag_channel] = this.channel;
+				if(match.c!='csref'){
+					//there is not a csref in the URL, lets update the combined storage
+					//whenever there is a csref, it's the cvp code that's responsible for the update.
+					var _this = this;	
+					this.storage.getItem('cvp_combined','cvp_combined',function(key,value){
+						var result = _this._pushValueToString(value, _this.classification);
+						var stored = result.value;
+						//boolean indicating if the stored value is updated
+						if(!result.pushed){
+							_this.cvpCombinedModified = false;
+						}else{
+							_this.cvpCombined = stored;
+							_this.cvpCombinedModified = true;
+							_this.storage.setItem('cvp_combined',stored,'cvp_combined');
+						}
+						if(classificationCallback!=undefined){classificationCallback();}
+					});
+				}else{
+					if(classificationCallback!=undefined){classificationCallback();}
+				}
+			}
+		},
+		//used for test purposes between calls
+		_reset:function(){
+			delete this.cvp;
+			delete this.cvpModified;
+			delete this.cvpCombinedModified;
+			delete this.cvpCombined;
+		},
+		
+		_classification_should_run:function(domain,referrer){
+			if(!_cvp_ext_config.classification.enable){return false;}
+			//extract the domain name without www prefix or tld
+			var regexDomain = domain.replace(/^(www\.)?([^\.]*).*/g,'$2');
+			if(referrer&&referrer.indexOf(regexDomain)>-1){
+				return false;
+			}
+			return true;
+		},
+		
+		_ref_matches:function(ref, sources){
+			for(var i = 0;i<sources.length;i++){
+				var source = sources[i];
+				for(var i2 = 0;i2<source.patterns.length;i2++){
+					if(ref.indexOf(source.patterns[i2])>-1){
+						return source;
+					}
+				}
+			}
+			
+		},
+		
+		//sets the CVP based on the URL, when no campaign parameter is available on the URL
+		//null is handed to the callback even though the storage might have a previous value
+		//stored. If a campaign is present on the URL and it does not exist in the storage, it'll return the concatenated value of
+		//the plain CVP and the combined CVP
+		setCVPFromURL:function(cb){
+			var campaign = this.getCampaignFromURL();
+			var _this = this;
+			if(campaign === null){
+				cb(null);
+				return;
+			}else{
+				//campaign = this.escapeString(campaign);
+				this.storage.getItem('csref','cvp',function(key,value){
+					var pushResult = _this._pushValueToString(value, campaign);
+					var valueStored = pushResult.value;
+					if(!pushResult.pushed){
+						_this.cvpModified = false;
+						//callback with null, since we are not storing the value
+						cb(null,null);
+					}else{
+						//we only store the actual cvp if it has been picked up and it doesn't already exist
+						_this.cvpModified = true;
+						_this.cvp =valueStored; 
+						_this.storage.setItem('csref',valueStored,'cvp');
+						var utagStorage = _cvp_ext_config.cvp.utag_data;
+						if(utagStorage){
+							utag_data[utagStorage] = valueStored;
+						}
+						if(_cvp_ext_config.cvp.cvp_analytics_update){
+							_cvp_ext_config.cvp.cvp_analytics_update(valueStored);
+						}
+						//push the value to the cvp_combined storage
+						_this.storage.getItem('cvp_combined','cvp_combined',function(key,value){
+							var result = _this._pushValueToString(value, 'csref|'+campaign);
+							var stored = result.value;
+							if(!result.pushed){
+								_this.cvpCombinedModified = false;
+							}else{
+								_this.cvpCombined = stored;
+								_this.cvpCombinedModified = true;
+								_this.storage.setItem('cvp_combined',stored,'cvp_combined');
+							}
+							cb(valueStored, stored);
+						});
+					}
+				});
+			}
+		},
+		//pushes a value on to a : separated string
+		//if the value is already in place, it will be ignored
+		_pushValueToString:function(string,value){
+			value = this.escapeString(value);
+			var valueStored = null;
+			var pushed = false;
+			var values = this.splitFromStorage(string);
+			if(values.indexOf(value)===-1){
+				values.push(value);
+				pushed = true;
+			}
+			for (var i = 0; i < values.length; i++) {
+				if (i > 0){ valueStored += ":" + values[i];}
+				else{ valueStored = values[i];}
+			}
+			return {'value':valueStored,'pushed':pushed};
+		},
+		
+		splitFromStorage:function(storedValue){
+			var returnValue = [];
+			if(!storedValue){
+				return returnValue;
+			}
+			returnValue = storedValue.split(':');
+			returnValue = returnValue.filter(function(e) {
+				return e;
+			});
+			return returnValue;
+		},
+		
+		getCampaignFromURL:function(){
+			var campaign = this.gup(_cvp_ext_config.cvp.campaignParam);
+			if(!campaign){
+				return null;
+			}else{
+				return campaign;
+			}
+		},
+		
+		gup:function(name){
+			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");  
+			var regexS = "[\\?&]"+name+"=([^&#]*)";  
+			var regex = new RegExp( regexS );  
+			var results = regex.exec( window.location.href ); 
+			if( results == null )
+				return null;
+			else 
+				return unescape(results[1]);
+		},
+		
+		escapeString:function(string){
+			if(!string)return '';
+			return string.replace(/:/g, "|");
+		}
+	
+	,cookieStorage:{
+		config:{'cvp':{expire:30},'cvp_combined':{expire:30}},
+		//gets the item from a specific storage
+		getItem:function(key, storage,callback){
+			var cookieVal = this.getCookie(storage);
+			//if the cookie value is not set, return null
+			if(!cookieVal){
+				cookieVal = null;
+			}else{
+				var split = cookieVal.split('=');
+				cookieVal = split[split.length-1];
+				cookieVal = decodeURIComponent(cookieVal);
+				if(cookieVal.length===0){cookieVal = null;}
+			}
+			callback(key, cookieVal, storage);
+		},
+		//sets the item on a specific storage
+		setItem:function(key, value, storage){
+			this.setCookie(storage,key+'='+encodeURIComponent(value), this.config[storage].expire);
+		},
+		
+		getCookie:function(cname) {
+		    var name = cname + "=";
+		    var ca = document.cookie.split(';');
+		    for(var i=0; i<ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0)==' ') c = c.substring(1);
+		        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+		    }
+		    return '';
+		},
+		
+		setCookie:function(cname, cvalue, exdays) {
+		    var d = new Date();
+		    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		    var expires = "expires="+d.toUTCString();
+		    document.cookie = cname + "=" + cvalue + "; " + expires;
+		} 
+	},
+	remoteStorage:{
+		_storage:null,
+		
+		_init:function(){
+			if(!this._storage){
+				var extConfig = _cvp_ext_config.remoteStorage;
+				this._storage = new CDStorage(extConfig.protocol+'://'+ extConfig.domain, extConfig.path);
+				this._storage.init();
+			}
+		},
+		getItem:function(key, storage,callback){
+			this._init();
+			var _this = this;
+			this._storage.getItem(key+'Date', function(dateKey,dateValue){
+				if(dateValue){
+					var i = (new Date() - Date.parse(dateValue)) / (1000 * 24 * 60 * 60);
+					if (i > 30) {
+						//resets the value after it hasn't been used for 30 days
+						_this._storage.removeItem(key);
+						_this._storage.removeItem(key+'Date');
+						callback(key, null, storage);
+					}else{
+						_this._storage.getItem(key, function(key,value){
+							if(value!=null&&value.length===0){
+								value = null;
+							}
+							callback(key, value, storage);
+						});
+					}
+				}else{
+					callback(key, null, storage);
+				}
+			});
+		},
+		
+		setItem:function(key, value, storage, date){
+			if(!key||key!=null&&key.length==0){
+				return;
+			}
+			this._init();
+			if(!date){
+				date = new Date();
+			}
+			this._storage.setItem(key+'Date',date);
+			this._storage.setItem(key, value);
+		},
+		
+		removeItem:function(key){
+			this._init();
+			this._storage.removeItem(key);
+		}
+	},
+	
+	normalStorage:{
+		//gets the item from a specific storage
+		getItem:function(key, storage,callback){
+		
+			var dateKey = key+'Date';
+			var dateValue=window.localStorage.getItem(dateKey);
+			
+			if(dateValue){
+				var i = (new Date() - Date.parse(dateValue)) / (1000 * 24 * 60 * 60);
+				if (i > 30) {
+					window.localStorage.removeItem(key);
+					window.localStorage.removeItem(dateKey);
+					callback(key, null, storage);
+				}else{
+					var val=window.localStorage.getItem(key);					
+					if(val!=null&&val.length===0){
+						val = null;
+					}
+					callback(key, val, storage);
+				}
+			}else{
+				callback(key, null, storage);
+			}
+			
+		},
+		//sets the item on a specific storage
+		setItem:function(key, value, storage, date){
+			if(!key||key!=null&&key.length==0){
+				return;
+			}
+			if(!date){
+				date = new Date();
+			}
+			window.localStorage.setItem(key+'Date',date);
+			window.localStorage.setItem(key,value);
+		}
+	}
+};
+}

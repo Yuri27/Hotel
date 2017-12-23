@@ -1,0 +1,29 @@
+_cvp_ext_config={
+	cvp:{
+		//the parameter to look for in the URL
+		'campaignParam':'csref',
+		//the utag_data to populate (optional)
+		'utag_data':'c_stack',
+		//sample function for setting the stackedValue in analytics
+		'cvp_analytics_update':function(cvpValue,combinedValue){
+			/*
+			if(!window.s){window.s={};}
+			window.s.eVar51=cvpValue;
+			window.s.eVar52=combinedValue;
+			*/
+		},
+		'cvpEvar':'eVar61'
+	},
+	storage:'local',//valid values are cookie or remote
+	remoteStorage:{
+		domain:'parameterized',
+		protocol:'https',
+		path:'/cs/Satellite?pagename=generic-elements/Page/cd_localstorage&site=SITE&hansi=true',
+	},
+	classification:{
+		'enable':true,
+		'cvpEvarCombined':'eVar62',
+		'utag_classification':'ref_classification',
+		'utag_channel':'channel'
+	},
+};

@@ -1,0 +1,50 @@
+var googleMapsApiWasLoaded = typeof google !== 'undefined' && google && typeof google.maps !== 'undefined';
+var googleMapsApiRequested = false;
+var googleMapsApiCallbacks = [];
+
+function googleMapsApiLoaded() {
+	googleMapsApiWasLoaded = true;
+
+	googleMapsApiCallbacks.sort(function(entry1, entry2) { return entry2.pr - entry1.pr; });
+	
+	for (var i in googleMapsApiCallbacks) {
+		var cb = googleMapsApiCallbacks[i];
+		if (cb) {
+			(function(_cb){
+				setTimeout(_cb.cb, 5);
+			})(cb);
+		}
+	}
+	googleMapsApiCallbacks = [];
+}
+
+function loadGoogleMapsApi(callback, priority) {
+	
+	if (callback) {
+		googleMapsApiCallbacks.push({cb: callback, pr: priority ? priority : 0});
+	}
+	
+	if (!googleMapsApiWasLoaded && !googleMapsApiRequested) {
+		var lGoogleClientId = '';
+		var lGoogleApiVersion= '';
+		
+		if (typeof gGoogleClientId !== "undefined" && gGoogleClientId) {
+			lGoogleClientId = '&client=' + gGoogleClientId;
+	   	}
+		
+		if (typeof gGoogleApiVersion !== "undefined" && gGoogleApiVersion) {
+			lGoogleApiVersion = '&v=' + gGoogleApiVersion;
+	   	}
+		
+		var lGoogleMapApi = '//maps.googleapis.com/maps/api/js?&sensor=false&callback=googleMapsApiLoaded' + lGoogleClientId + lGoogleApiVersion;
+		
+		googleMapsApiRequested = true;
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = lGoogleMapApi;
+		document.body.appendChild(script);
+	} else if (googleMapsApiWasLoaded) {
+		googleMapsApiLoaded();
+	}
+	  
+}

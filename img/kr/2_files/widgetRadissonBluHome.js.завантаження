@@ -1,0 +1,838 @@
+var hotelswidget = new (function(window, document, jQuery){
+    var domain = 'https://www.123compare.me/v2'
+	//var domain = 'http://localhost:8080/123CompareMe-v2'
+    var datos = {};
+    datos.user = 1;
+    datos.branch = 2;
+    datos.screen = 3;
+    this.topWidget;
+    this.badgetTime = 5;
+    this.badgetCheck = false;
+    this.timeExceeded = false;
+    
+    this.anchuraElement = 90;
+    this.animationTime = 5;
+    this.totalElements;
+    this.isAnimation = false;
+    
+    this.init = function (showWidget) {
+    	if(showWidget === false){
+            hotelswidget.setAnalytics();
+        } else {
+        	hotelswidget.setAnalytics();
+        	
+        	datos.domain = domain;
+        	datos.hotel = jQuery('#searchForm').find('#WEHotelCode').val();
+        	/*datos.rooms = jQuery('[name="rateSearchForm.numberRooms"]').val();
+		    datos.guests = jQuery('[name="occupancyForm[0].numberAdults"]').val();
+		    datos.start = hotelswidget.dateConverse(jQuery('[name="rateSearchForm.checkinDate"]').val());
+		    datos.stop = hotelswidget.dateConverse(jQuery('[name="rateSearchForm.checkoutDate"]').val());
+		    datos.currency = jQuery('.ratecurrency').first().text().trim();*/
+		    datos.lang = jQuery('html').attr('lang');
+		    /*datos.defaultLang = "en";
+		    datos.price = hotelswidget.priceConverse(jQuery('.rateamount').first().text().trim(), datos.lang);
+		    datos.device = 'isDesktop';
+		    datos.rateNight = true;*/
+		    
+        	hotelswidget.callBadgets(datos.hotel, datos.lang);
+
+            /*var refreshIntervalId = null;
+        	refreshIntervalId = setInterval(checkIfVariableIsTrue, 250);
+        	        	
+        	function checkIfVariableIsTrue(){
+                if(hotelswidget.badgetCheck === true){
+                    clearInterval(refreshIntervalId);
+                    
+                    hotelswidget.comprobarCORS();
+                	
+                    var parametros = 'user='+datos.user+'&branch='+datos.branch+'&screen='+datos.screen+'&domain='+datos.domain+'&hotelName='+datos.hotel+'&rooms='+datos.rooms+'&guests='+datos.guests+'&start='+datos.start+'&stop='+datos.stop+'&currency='+datos.currency+'&lang='+datos.lang+'&defaultLang='+datos.defaultLang+'&priceWidget='+datos.price+'&device='+datos.device+'&rateNight='+datos.rateNight;
+                    var url_ajax = "https://www.123compare.me/v2/widget/widgetParkInn?"+parametros+"&callback=apiStatus";
+                	jQuery.ajax(url_ajax,{
+                		dataType: "script",
+                		jsonpCallback: 'apiStatus'
+                	}).done(function(data) {
+                	}).fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' '+ errorThrown); });
+                }
+            };*/
+				
+		}
+			
+	}
+
+    this.dateConverse = function(date){
+        converseDate = date.slice(3,5)+'/'+date.slice(0,2)+'/'+date.slice(6,10);
+        return converseDate;
+    }
+
+    this.priceConverse = function(price,lang){
+        if(lang == 'en' || lang == 'en_UK'){
+            price = price.replace(/,/g,'');
+        } else{
+        	price = price.replace(/\s+/g,"");
+            price = price.replace(',','.');
+        }
+        if (isNaN(price)){
+            return parseFloat(price.slice(1)).toFixed(2);
+        } else {
+        	price = parseFloat(price);
+        	if (price > 999999){
+        		price = Math.round(price);
+        		return parseInt(price);
+        	} else {
+        		return price.toFixed(2);
+        	}
+        }
+    }
+    
+    this.setAnalytics = function(){
+        jQuery('body').append("<script type='text/javascript'>var _paq = _paq || [];_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);(function() {var u='//piwik.123compare.me/';_paq.push(['setTrackerUrl', u+'piwik.php']);_paq.push(['setSiteId', 1]);var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);})();</script><noscript><p><img src='//piwik.123compare.me/piwik.php?idsite=1' style='border:0;' alt='' /></p></noscript>");
+    }
+    
+    this.setJavascript = {
+    	setPriceInWidget : function(price,currency){
+    		if(lang == 'en' || lang == 'en_UK'){
+    			price = parseFloat(price);
+    			if(price > 999999){
+                    jQuery('#widget123_top_bottom_price').html(price);
+    			} else {
+                    jQuery('#widget123_top_bottom_price').html((price.toFixed(2)).replace(',','.'));
+    			}
+    		} else{
+    			price = parseFloat(price);
+    			if(price > 999999){
+                    jQuery('#widget123_top_bottom_price').html(price.toFixed(0).replace('.',','));
+    			} else{
+                    jQuery('#widget123_top_bottom_price').html((price.toFixed(2)).replace('.',','));
+    			}
+            }
+            jQuery('#widget123_top_bottom_currency').html(currency);
+    	},
+    	setWidgetJavascript : function(){
+    		hotelswidget.topWidget = jQuery('.panelHeaderWrapper').offset().top - 1;
+            
+        	var screen_width = jQuery('#page').width();
+        	var page_width = jQuery('.ratesearchresultspage').width();
+        	var page_left = jQuery('.ratesearchresultspage').offset().left
+        	
+        	var free_space = screen_width - (page_width + page_left);      	
+        	
+        	if (free_space > 190){
+        		hotelswidget.leftWidget = (page_left + page_width);
+        	} else {
+        		hotelswidget.leftWidget = (screen_width - 190 - 2);
+        	}
+        	
+            jQuery('#widget123').css({
+                'top' : hotelswidget.topWidget,
+                'left' : jQuery( window ).width() + 1
+            });
+            
+            jQuery('#widget123_close').click(function(){
+        		jQuery('#widget123').hide('scale',1000, function(){});
+        	});
+
+            _paq.push(['trackEvent', 'Widget', 'Show', 'Widget correctly showed']);
+    	},
+    	setWidgetData : function(datos,price,currency){
+    		var href = hotelswidget.setUrlHref();
+            data = datos;
+            /*if(data.currency === 'XXX'){
+            	_paq.push(['trackEvent', 'Widget', 'No currency', 'Currency not available']);
+                return 0;
+            }*/
+            if ((data === null) || (data.length === 0)){
+                _paq.push(['trackEvent', 'Widget', 'No results', 'Widget not showed (No data available)']);
+                return 0;
+            }
+            var content_middle = document.getElementById("widget123_bottom");            	
+            var count = 0;
+            for (var i = 0; i < data.length; i++) {
+
+                var precio_convertido = parseFloat(data[i].widgetPrice);
+                
+
+                if (((price * 0.995) < precio_convertido || (price * 0.995) == precio_convertido)) {
+                    count = count + 1;
+                    	
+                	var element = document.createElement("div");
+                    element.setAttribute('id', 'element');
+                    
+                    var element_left = document.createElement("div");
+                    element_left.setAttribute('id', 'element_left');
+                    element_left.innerHTML = '<span class="element_left_ota">' + data[i].site + '</span>';
+                    element.appendChild(element_left);
+                    
+                    var element_right = document.createElement("div");
+                    element_right.setAttribute('id', 'element_right');
+                    element_right.innerHTML = '<span id="element_right_price">'+precio_convertido.toFixed(2)+'</span>&nbsp;<span id="element_right_currency">'+currency+'</span>';
+                    element.appendChild(element_right);
+
+                    var clear = document.createElement('div');
+                    clear.setAttribute('style', 'clear:both;');
+                    element.appendChild(clear);
+
+                    content_middle.appendChild(element);
+                }
+            }
+            //hotelswidget.detectInactivity(20);
+            if (count === 0){
+                _paq.push(['trackEvent', 'Widget', 'No results', 'No results shown']);
+            } else {
+                _paq.push(['trackEvent', 'Widget', 'Results', 'Shown '+count+' results']);
+                hotelswidget.functionAnadirParametros();
+                
+                var refreshIntervalTimeExceeded = null;
+                refreshIntervalTimeExceeded = setInterval(checkIfTimeExceeded, 250);
+            	function checkIfTimeExceeded(){
+                    if(hotelswidget.timeExceeded === true){
+                        clearInterval(refreshIntervalTimeExceeded);
+                        
+                        if(jQuery('#widget123_badget').length > 0){
+                        	jQuery('#widget123_badget').animate({
+                        		'left' : (jQuery( window ).width() + 1)
+                        	}, 2000, function(){
+                        		jQuery('#widget123').show();
+                            	jQuery('#widget123').animate({
+                            		'left' : hotelswidget.leftWidget
+                            	}, 2000, function(){});
+                        	});
+                        } else {
+                        	jQuery('#widget123').show();
+                        	jQuery('#widget123').animate({
+                        		'left' : hotelswidget.leftWidget
+                        	}, 2000, function(){});
+                        }
+                    }
+                };
+                
+            }
+            jQuery('#boton_reservar_widget').attr('href', href);
+    	}
+    }
+    
+    this.hotelName = function(name){
+    	hotelName = name.replace('&','');
+        return hotelName;
+    }
+    
+    this.setUrlHref = function(){
+    	var script = jQuery('td.v1').find('a').attr('href');
+        var pos_first = script.indexOf('(');
+        var pos_last = script.indexOf(')');
+        var parameters = script.slice(pos_first+1,pos_last);
+        var array = parameters.split(',');
+        var href = "javascript:hotelswidget.functionReservar("+array[0]+","+array[1]+","+array[2]+","+array[3]+")";
+        return href;
+    }
+
+
+    this.functionReservar = function(pHotelCode, pRateUni, pRedemptionRate, pClearEcertCode){
+    	_paq.push(['trackEvent', 'Widget', 'Click Book', 'Book button clicked']);
+    	
+    	jQuery('<input type="hidden" name="altFacilitatorId" value="REZIDORRATETABLE">').appendTo('#hiddenRateReviewForm');    	
+    	jQuery('<input type="hidden" name="icid" value="co_booking_direction">').appendTo('#hiddenRateReviewForm');
+        
+        if (jQuery('staticPopup'))
+        {
+        hideStaticDetailDivWithOverlay('staticPopup');
+        } 
+        var lForm = jQuery('hiddenRateReviewForm');
+        lForm['rateSelectForm.hotelCode'].value = pHotelCode;
+        lForm['rateSelectForm.rateUni'].value = pRateUni; 
+        
+        if (pClearEcertCode)
+        {
+      	  lForm['rateSearchForm.ecertCodeForNonEligibleRate'].value =  lForm['rateSearchForm.ecertCode'].value;
+      	  lForm['rateSearchForm.ecertCode'].value = '';
+        }
+        if (pRedemptionRate)
+        {
+      	  lForm['rateSearchForm.redemptionSearch'].value = true;
+        }
+        lForm.submit();
+    }
+    
+    this.functionAnadirParametros = function(){
+    	
+    	jQuery('<input type="hidden" name="widgetubiquashow" value="true">').appendTo('#hiddenRateReviewForm');
+        
+    }
+    
+    this.callBadgets = function(code, lang){
+    	
+    	hotelswidget.comprobarCORS();
+
+    	var url_ajax = "https://www.123compare.me/v2/api/badgets?code_hotel="+code+"&callback=apiStatus";
+    	jQuery.getJSON(url_ajax,{
+    		dataType: "jsonp",
+    		jsonpCallback: 'apiStatus'
+    	}).done(function(data) {
+    		if (data.length > 0){
+				 hotelswidget.badgetWidget(data, lang, code);
+			 } else {
+				 hotelswidget.badgetCheck = true;
+				 hotelswidget.timeExceeded = true;
+			 }
+    	}).fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' '+ errorThrown); });
+    	
+    }
+    
+    this.badgetWidget = function(data, lang, code){
+    	
+    	if (code === 'LPAZR'){
+    		
+    		jQuery('.hotel-overview .booking-share .social-share').attr('style', 'float:none !important');
+        	
+        	if (lang === "ar"){
+            	jQuery('body').append("<style id='widget123_badget_style'> .widget123_selector{width: 10px; height: 10px; margin-right: 8px; float: left; display: block; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAG1BMVEUAAAC5ubm5ubm6urq8vLzCwsK4uLi6urq5ubnJ1FS0AAAACXRSTlMA5LJZPRkSenuRkJ14AAAAL0lEQVQI12NgcBJUYWBgFw41LGBwTGBgE2FQZmBgMGIQBZKBEBIiApXlAKmE6AIAsisF/GKRuXMAAAAASUVORK5CYII='); background-size: 100% 100%;} .selector-actived{ background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAFVBMVEUAAAC4uLi5ubm8vLy6urq5ubm4uLj9JP4RAAAABnRSTlMA5rI9entA/fz0AAAALElEQVQI12NgMBJUZmBgSUtLc2AwA5LJDGpAMolBDEgmQkiICFSWFaQSogsAowwOFq+J1GYAAAAASUVORK5CYII='); background-size:100% 100%;} .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-left: 0% !important; } #widget123_badget{ width: 220px; height: 300px; position: relative; float: left; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; left: 0px;} #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 10px; width: 130px; height: 250px; margin-left: 0px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: right; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+        	} else {
+            	//jQuery('body').append("<style id='widget123_badget_style'> .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-right: 0% !important; } #widget123_badget{ display: none; margin-right: 30px; width: 220px; height: 320px; position: relative; float: right; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; } #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 0px; width: 130px; height: 250px; margin-left: 10px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: left; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+            	jQuery('body').append("<style id='widget123_badget_style'> .widget123_selector{width: 10px; height: 10px; margin-right: 8px; float: left; display: block; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAG1BMVEUAAAC5ubm5ubm6urq8vLzCwsK4uLi6urq5ubnJ1FS0AAAACXRSTlMA5LJZPRkSenuRkJ14AAAAL0lEQVQI12NgcBJUYWBgFw41LGBwTGBgE2FQZmBgMGIQBZKBEBIiApXlAKmE6AIAsisF/GKRuXMAAAAASUVORK5CYII='); background-size: 100% 100%;} .selector-actived{ background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAFVBMVEUAAAC4uLi5ubm8vLy6urq5ubm4uLj9JP4RAAAABnRSTlMA5rI9entA/fz0AAAALElEQVQI12NgMBJUZmBgSUtLc2AwA5LJDGpAMolBDEgmQkiICFSWFaQSogsAowwOFq+J1GYAAAAASUVORK5CYII='); background-size:100% 100%;} .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-right: 0% !important; } #widget123_badget{ margin-right: 30px; width: 220px; height: 320px; position: relative; float: right; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; } #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 0px; width: 130px; height: 250px; margin-left: 10px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: left; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+        	}
+        	
+        	var widget_top = "<div id='widget123_badget'>#content</div>";
+        	
+        	var widget_top_content = "";
+        	
+        	//var widget_top_selector = "<div id='widget123_selector'>#content</div>";
+        	var selector_width = (data.length + 1) * 18;
+        	var selector_margin_left = (220 - (selector_width - 8)) / 2;
+        	var widget_top_selector = "<div id='widget123_selector' style='width:"+selector_width+"px; margin-left:"+selector_margin_left+"px;'>#content</div>";
+        	var widget_top_selector_content = "";
+        	
+        	var trad = hotelswidget.setTranslate(lang);
+        	
+        	var count = 0;
+        	for (var i = 0; i < data.length; i++) {
+        		
+        		var text = "";
+        		    		
+        		if ((data[i].id_badget === 1) || (data[i].id_badget === 2) || (data[i].id_badget === 3)){
+        			text = trad["widget123_badget_top_text_trip"];
+        		}
+        		
+        		if (data[i].id_badget === 4){
+        			text = trad["widget123_badget_top_text_green_leaders"];
+        		}
+        		
+        		if (data[i].id_badget === 5){
+        			text = trad["widget123_badget_top_text_hall"];
+        		}
+        		
+        		if ((data[i].id_badget === 6) || (data[i].id_badget === 7) || (data[i].id_badget === 8)){
+        			text = trad["widget123_badget_top_text_safe"];
+        		}
+        		
+        		if ((data[i].id_badget === 9) || (data[i].id_badget === 10)){
+        			text = trad["widget123_badget_top_text_travellers"];
+        		}
+        		
+        		if (data[i].id_badget === 11){
+        			text = trad["widget123_badget_top_text_romanian"];
+        		}
+        		
+        		if (data[i].id_badget === 12){
+        			text = trad["widget123_badget_top_text_green_key"];
+        		}
+        		
+        		if (data[i].id_badget === 13){
+        			text = trad["widget123_badget_top_text_world_luxury_hotel"];
+        		}
+
+    			if (text === undefined){
+    				text = "";
+    			}
+        		
+        		widget_top_content = widget_top_content + "<div id='widget123_badget_top' style='left:"+(count * 220)+"px;' data-element='"+(count + 1)+"' data-element-initial='"+(count + 1)+"'>" +
+    			"<img src='//www.123compare.me/images/badgets/horizontal/"+data[i].logo+"'/>" +
+    			"<div id='widget123_badget_top_text'>"+text+"</div>" +
+    			"</div>";
+        		
+        		widget_top_selector_content = widget_top_selector_content + "<span class='widget123_selector' data-selector='"+(count + 1)+"'></span>";
+        		
+        		count = count + 1;
+        		
+        	}
+        	
+        	var text_webcam = trad["widget123_badget_top_text_webcam"];
+        	
+        	widget_top_content = widget_top_content + '<div id="widget123_badget_top" style="left:'+(count * 220)+'px;" data-element="'+(count + 1)+'" data-element-initial="'+(count + 1)+'"><div data-deckchair-embed="" data-deckchair-width="100%" data-deckchair-camera="radisson-blu-resort-gran-canaria-spain"><a href="https://camera.deckchair.com/radisson-blu-resort-gran-canaria-spain" target="_blank">Radisson Blu, Gran Canaria - Live Webcam</a></div><div id="widget123_badget_top_text">'+text_webcam+'</div></div>';
+        	//widget_top_content = widget_top_content + '<div id="widget123_badget_top" style="left:'+(count * 220)+'px;" data-element="'+(count + 1)+'" data-element-initial="'+(count + 1)+'" data-deckchair-embed="" data-deckchair-width="100%" data-deckchair-camera="radisson-blu-resort-gran-canaria-spain"><a href="https://camera.deckchair.com/radisson-blu-resort-gran-canaria-spain" target="_blank">Radisson Blu, Gran Canaria - Live Webcam</a></div>';
+        	
+        	widget_top_selector_content = widget_top_selector_content + "<span class='widget123_selector' data-selector='"+(count + 1)+"'></span>";
+        	
+        	
+        	if (count > 1){
+        		widget_top_selector = widget_top_selector.replace("#content", widget_top_selector_content);
+        		widget_top_content = widget_top_content + widget_top_selector;
+        	}
+        	
+        	widget_top = widget_top.replace("#content", widget_top_content);
+        	jQuery(widget_top).insertAfter('.hotel-booking-button'); 
+        	
+        	hotelswidget.totalElements = count + 1;
+        	
+        	//jQuery("div#widget123_top_selector_div_element").first().addClass('selector-actived');
+        	jQuery("span.widget123_selector").first().addClass('selector-actived');
+        	
+        	if (hotelswidget.totalElements > 1){
+        		hotelswidget.setAnimationWidget(hotelswidget.totalElements,5);
+        	}
+        	    	
+        	jQuery(document).on("click", '.widget123_selector', function () {
+        		hotelswidget.selectorClicked(jQuery(this).attr("data-selector"),hotelswidget.totalElements);
+        	});
+        	
+        	// Start Deckchair Library //
+    	    window.dcAsyncInit = function () {
+    	        window.deckchair_com.config = {
+    	            version: '1',
+    	            urlMode: '#',
+    	            urlKey: 'webcam'
+    	        };
+    	        window.deckchair_com.init();
+    	    };
+    	    (function (d, s, id) {
+    	        var js, djs = d.getElementsByTagName(s)[0];
+    	        if (d.getElementById(id)) {
+    	            return;
+    	        }
+    	        js = d.createElement(s);
+    	        js.id = id;
+    	        js.src = "//camera.deckchair.com/embed.js";
+    	        djs.parentNode.insertBefore(js, djs);
+    	    }(document, 'script', 'deckchair-jssdk'));
+    	    // End Deckchair Library //
+    		
+    		
+    	} else {
+    		
+    		jQuery('.hotel-overview .booking-share .social-share').attr('style', 'float:none !important');
+        	
+        	if (lang === "ar"){
+            	jQuery('body').append("<style id='widget123_badget_style'> .widget123_selector{width: 10px; height: 10px; margin-right: 8px; float: left; display: block; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAG1BMVEUAAAC5ubm5ubm6urq8vLzCwsK4uLi6urq5ubnJ1FS0AAAACXRSTlMA5LJZPRkSenuRkJ14AAAAL0lEQVQI12NgcBJUYWBgFw41LGBwTGBgE2FQZmBgMGIQBZKBEBIiApXlAKmE6AIAsisF/GKRuXMAAAAASUVORK5CYII='); background-size: 100% 100%;} .selector-actived{ background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAFVBMVEUAAAC4uLi5ubm8vLy6urq5ubm4uLj9JP4RAAAABnRSTlMA5rI9entA/fz0AAAALElEQVQI12NgMBJUZmBgSUtLc2AwA5LJDGpAMolBDEgmQkiICFSWFaQSogsAowwOFq+J1GYAAAAASUVORK5CYII='); background-size:100% 100%;} .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-left: 0% !important; } #widget123_badget{ width: 220px; height: 300px; position: relative; float: left; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; left: 0px;} #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 10px; width: 130px; height: 250px; margin-left: 0px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: right; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+        	} else {
+            	//jQuery('body').append("<style id='widget123_badget_style'> .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-right: 0% !important; } #widget123_badget{ display: none; margin-right: 30px; width: 220px; height: 320px; position: relative; float: right; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; } #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 0px; width: 130px; height: 250px; margin-left: 10px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: left; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+            	jQuery('body').append("<style id='widget123_badget_style'> .widget123_selector{width: 10px; height: 10px; margin-right: 8px; float: left; display: block; background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAG1BMVEUAAAC5ubm5ubm6urq8vLzCwsK4uLi6urq5ubnJ1FS0AAAACXRSTlMA5LJZPRkSenuRkJ14AAAAL0lEQVQI12NgcBJUYWBgFw41LGBwTGBgE2FQZmBgMGIQBZKBEBIiApXlAKmE6AIAsisF/GKRuXMAAAAASUVORK5CYII='); background-size: 100% 100%;} .selector-actived{ background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKBAMAAAB/HNKOAAAAFVBMVEUAAAC4uLi5ubm8vLy6urq5ubm4uLj9JP4RAAAABnRSTlMA5rI9entA/fz0AAAALElEQVQI12NgMBJUZmBgSUtLc2AwA5LJDGpAMolBDEgmQkiICFSWFaQSogsAowwOFq+J1GYAAAAASUVORK5CYII='); background-size:100% 100%;} .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-right: 0% !important; } #widget123_badget{ margin-right: 30px; width: 220px; height: 320px; position: relative; float: right; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 220px; height: 20px; bottom: 0px; background-color: transparent; } #widget123_top_selector_div_element{ height: 20px; background-color: transparent; float: left; } #widget123_top_selector_div_element_line{ width: 80%; max-width: 50px; margin: auto; margin-top: 5px; height: 10px; background-color: #9e9fa2; } .selector-actived > div { margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 0px; width: 130px; height: 250px; margin-left: 10px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: left; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+        	}
+        	
+        	var widget_top = "<div id='widget123_badget'>#content</div>";
+        	
+        	var widget_top_content = "";
+        	
+        	//var widget_top_selector = "<div id='widget123_selector'>#content</div>";
+        	var selector_width = data.length * 18;
+        	var selector_margin_left = (220 - (selector_width - 8)) / 2;
+        	var widget_top_selector = "<div id='widget123_selector' style='width:"+selector_width+"px; margin-left:"+selector_margin_left+"px;'>#content</div>";
+        	var widget_top_selector_content = "";
+        	
+        	var trad = hotelswidget.setTranslate(lang);
+        	
+        	var count = 0;
+        	for (var i = 0; i < data.length; i++) {
+        		
+        		var text = "";
+        		    		
+        		if ((data[i].id_badget === 1) || (data[i].id_badget === 2) || (data[i].id_badget === 3)){
+        			text = trad["widget123_badget_top_text_trip"];
+        		}
+        		
+        		if (data[i].id_badget === 4){
+        			text = trad["widget123_badget_top_text_green_leaders"];
+        		}
+        		
+        		if (data[i].id_badget === 5){
+        			text = trad["widget123_badget_top_text_hall"];
+        		}
+        		
+        		if ((data[i].id_badget === 6) || (data[i].id_badget === 7) || (data[i].id_badget === 8)){
+        			text = trad["widget123_badget_top_text_safe"];
+        		}
+        		
+        		if ((data[i].id_badget === 9) || (data[i].id_badget === 10)){
+        			text = trad["widget123_badget_top_text_travellers"];
+        		}
+        		
+        		if (data[i].id_badget === 11){
+        			text = trad["widget123_badget_top_text_romanian"];
+        		}
+        		
+        		if (data[i].id_badget === 12){
+        			text = trad["widget123_badget_top_text_green_key"];
+        		}
+        		
+        		if (data[i].id_badget === 13){
+        			text = trad["widget123_badget_top_text_world_luxury_hotel"];
+        		}
+
+    			if (text === undefined){
+    				text = "";
+    			}
+        		
+        		widget_top_content = widget_top_content + "<div id='widget123_badget_top' style='left:"+(count * 220)+"px;' data-element='"+(count + 1)+"' data-element-initial='"+(count + 1)+"'>" +
+    			"<img src='//www.123compare.me/images/badgets/horizontal/"+data[i].logo+"'/>" +
+    			"<div id='widget123_badget_top_text'>"+text+"</div>" +
+    			"</div>";
+        		
+        		widget_top_selector_content = widget_top_selector_content + "<span class='widget123_selector' data-selector='"+(count + 1)+"'></span>";
+        		
+        		count = count + 1;
+        		
+        	}
+        	
+        	if (count > 1){
+        		widget_top_selector = widget_top_selector.replace("#content", widget_top_selector_content);
+        		widget_top_content = widget_top_content + widget_top_selector;
+        	}
+        	
+        	widget_top = widget_top.replace("#content", widget_top_content);
+        	jQuery(widget_top).insertAfter('.hotel-booking-button'); 
+        	
+        	hotelswidget.totalElements = count;
+        	
+        	//jQuery("div#widget123_top_selector_div_element").first().addClass('selector-actived');
+        	jQuery("span.widget123_selector").first().addClass('selector-actived');
+        	
+        	if (hotelswidget.totalElements > 1){
+        		hotelswidget.setAnimationWidget(hotelswidget.totalElements,5);
+        	}
+        	    	
+        	jQuery(document).on("click", '.widget123_selector', function () {
+        		hotelswidget.selectorClicked(jQuery(this).attr("data-selector"),hotelswidget.totalElements);
+        	});
+    		
+    	}
+    	
+    	
+    	
+    	/*if (code === 'LPAZR'){
+    		jQuery("#widget123_badget").hide();
+    	}*/
+    	
+    }
+    
+    /*this.badgetWidget = function(data, lang){
+    	
+    	jQuery('.hotel-overview .booking-share .social-share').attr('style', 'float:none !important');
+    	
+    	if (lang === "ar"){
+        	jQuery('body').append("<style id='widget123_badget_style'> .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-left: 0% !important; } #widget123_badget{ width: 220px; height: 300px; position: relative; float: left; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text_safe, #widget123_badget_top_text_trip{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 120px; height: 20px; bottom: 0px; left: 50px; background-color: transparent; } #widget123_top_selector_div_element{ width: 45px; margin-top: 5px; height: 10px; background-color: #9e9fa2; margin-left: 10px; float: left; } .selector-actived{ margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 10px; width: 130px; height: 250px; margin-left: 0px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: right; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text_safe, #widget123_badget_top_text_trip{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+    	} else {
+        	jQuery('body').append("<style id='widget123_badget_style'> .hotel-booking-button{ margin-right: 0% !important; margin-left: 0% !important } .trip-advisor{ clear: none !important; margin-right: 0% !important; } #widget123_badget{ margin-right: 30px; width: 220px; height: 320px; position: relative; float: right; overflow: hidden; } #widget123_badget_top{ position: absolute; width: 220px; } #widget123_badget_top img{ width: 220px; height: auto; } #widget123_badget_top_text_safe, #widget123_badget_top_text_trip{ margin-top: 10px; color: #034ea0; } #widget123_selector{ position: absolute; width: 120px; height: 20px; bottom: 0px; left: 50px; background-color: transparent; } #widget123_top_selector_div_element{ width: 45px; margin-top: 5px; height: 10px; background-color: #9e9fa2; margin-left: 10px; float: left; } .selector-actived{ margin-top: 3px !important; height: 14px !important; } @media screen and (min-width: 801px) and (max-width: 1060px) { #widget123_badget{ margin-right: 0px; width: 130px; height: 250px; margin-left: 10px; } #widget123_badget_top{ width: 130px; } #widget123_badget_top img{ width: 130px; } #widget123_selector{ left: 5px; } } @media screen and (min-width: 0px) and (max-width: 568px) { #widget123_badget{ margin-right: 0px; width: 150px; height: 170px; float: left; } #widget123_badget_top{ width: 150px; } #widget123_badget_top img{ width: 150px; } #widget123_badget_top_text_safe, #widget123_badget_top_text_trip{ display: none; } #widget123_selector{ display: none; } .social-share{ clear: both !important; } } </style>");
+    	}
+    	
+    	var widget_top_safe = "";
+    	var widget_top_trip = "";
+    	
+    	var widget_top = "<div id='widget123_badget'>#content</div>";
+    	
+    	var widget_top_content = "";
+    	
+    	var widget_top_selector = "<div id='widget123_selector'>#content</div>";
+    	var widget_top_selector_trip = "";
+    	var widget_top_selector_safe = "";
+
+    	
+    	var trad = hotelswidget.setTranslate(lang);
+    	
+    	var count = 0;
+    	var countBadget = 0;
+    	for (var i = 0; i < data.length; i++) {
+    		
+        	if ((data[i].id_badget === 1 ) || (data[i].id_badget === 2 ) || (data[i].id_badget === 3 )){
+        		countBadget = countBadget + 1;
+        		widget_top_trip = "<div id='widget123_badget_top' style='left:"+((countBadget - 1) * 220)+"px;' data-element='"+countBadget+"' data-element-initial='"+countBadget+"'>" +
+        				"<img src='//www.123compare.me/images/badgets/horizontal/"+data[i].logo+"'/>" +
+        				"<div id='widget123_badget_top_text_trip'>"+trad["widget123_badget_top_text_trip"]+"</div>" +
+        				"</div>"
+        		widget_top_selector_trip = "<div id='widget123_top_selector_div_element' data-selector='"+countBadget+"'></div>";
+        	}
+    		
+        	if ((data[i].id_badget === 6 ) || (data[i].id_badget === 7 ) || (data[i].id_badget === 8 )){
+        		countBadget = countBadget + 1;
+        		widget_top_safe = "<div id='widget123_badget_top' style='left:"+((countBadget - 1) * 220)+"px;' data-element='"+countBadget+"' data-element-initial='"+countBadget+"'>" +
+        				"<img src='//www.123compare.me/images/badgets/horizontal/"+data[i].logo+"'/>" +
+        				"<div id='widget123_badget_top_text_safe'>"+trad["widget123_badget_top_text_safe"]+"</div>" +
+        				"</div>"
+                widget_top_selector_safe = "<div id='widget123_top_selector_div_element' data-selector='"+countBadget+"'></div>";
+        	}
+    		
+    		count = count + 1;
+    		
+    	}
+    	
+    	if (widget_top_trip !== ""){
+    		widget_top_content = widget_top_content + widget_top_trip;
+    	}
+    	
+    	if (widget_top_safe !== ""){
+    		widget_top_content = widget_top_content + widget_top_safe;
+    	}
+    	
+    	if ((widget_top_safe !== "") || (widget_top_trip !== "")){
+    		
+    		if ((widget_top_selector_safe !== "") && (widget_top_selector_trip !== "")){
+    			var widget_top_selector_content = widget_top_selector_trip + widget_top_selector_safe;
+    			widget_top_selector = widget_top_selector.replace("#content", widget_top_selector_content);
+    			widget_top_content = widget_top_content + widget_top_selector;
+    		}
+    		
+    		widget_top = widget_top.replace("#content", widget_top_content);
+        	jQuery(widget_top).insertAfter('.hotel-booking-button');
+    	}    	
+    	
+    	hotelswidget.totalElements = countBadget;
+    	alert("ROC : "+hotelswidget.totalElements);
+    	
+    	if (hotelswidget.totalElements > 1){
+    		hotelswidget.setAnimationWidget(hotelswidget.totalElements,5);
+    	}
+    	
+    	jQuery("div#widget123_top_selector_div_element").first().addClass('selector-actived');
+    	
+    	jQuery(document).on("click", '#widget123_top_selector_div_element', function () {
+    		hotelswidget.selectorClicked(jQuery(this).attr("data-selector"));
+    	});
+    	
+    }*/
+    
+    this.setAnimationWidget = function(elements,time){
+    	time = time * 1000;
+    	
+    	var anchura = 220;
+    	
+    	datos.animation = setInterval(function(){
+    		jQuery('div#widget123_badget_top').each(function(index,element){
+				if (jQuery(element).attr('data-element') === '1'){
+					jQuery(element).animate({
+						'left' : '-'+anchura+'px'
+					},1000, function(){
+						jQuery(this).css({
+							'left': (elements - 1) * anchura
+						});
+						jQuery(this).attr('data-element',elements);
+					});
+				} else {
+					var next_element = parseInt(jQuery(element).attr('data-element')) - 1;
+					jQuery(element).animate({
+						'left' : ((parseInt(jQuery(element).attr('data-element')) - 2) * anchura)
+					},1000, function(){
+						jQuery(this).attr('data-element', next_element);
+					});
+				}
+								
+			});
+    		
+    		jQuery('.widget123_selector').each(function(index,element){
+    			if(jQuery(element).hasClass('selector-actived')){   
+    				var next_element = parseInt(jQuery(element).attr('data-selector')) + 1;
+    				if (next_element > elements){
+    					next_element = 1;
+    				}
+    				jQuery(element).removeClass('selector-actived');
+    				jQuery('[data-selector="'+next_element+'"]').addClass('selector-actived');
+    				return false;
+    			}
+    		});
+    		
+		},time);
+    	
+    	hotelswidget.isAnimation = true;
+    	
+    }
+    
+    this.selectorClicked = function(elemento,total){
+    	
+    	hotelswidget.stopAnimationWidget();
+    	    	
+    	$('div#widget123_badget_top').each(function(index,element){
+    		if(jQuery(element).attr('data-element-initial') === elemento){
+    			jQuery(element).css({
+    				'left':'0px'
+    			});
+    		} else {
+    			jQuery(element).css({
+    				'left':'220px'
+    			});
+    		}
+    	})
+    	
+    	$('.widget123_selector').each(function(index, element){
+    		if (jQuery(element).attr('data-selector') === elemento){
+    			jQuery(element).addClass('selector-actived');
+    		} else {
+    			jQuery(element).removeClass('selector-actived');
+    		}
+    	});
+    	
+    }
+    
+    this.stopAnimationWidget = function(){
+    	clearInterval(datos.animation);
+    	hotelswidget.isAnimation = false;
+    }
+    
+    this.comprobarCORS = function(){
+    	
+    	if (!jQuery.support.cors && window.XDomainRequest) {
+    	    var httpRegEx = /^https?:\/\//i;
+    	    var getOrPostRegEx = /^get|post$/i;
+    	    var sameSchemeRegEx = new RegExp('^'+location.protocol, 'i');
+    	    var xmlRegEx = /\/xml/i;
+
+    	    // ajaxTransport exists in jQuery 1.5+
+    	    jQuery.ajaxTransport('text html xml json', function(options, userOptions, jqXHR){
+    	        // XDomainRequests must be: asynchronous, GET or POST methods, HTTP or HTTPS protocol, and same scheme as calling page
+    	        if (options.crossDomain && options.async && getOrPostRegEx.test(options.type) && httpRegEx.test(userOptions.url) && sameSchemeRegEx.test(userOptions.url)) {
+    	            var xdr = null;
+    	            var userType = (userOptions.dataType||'').toLowerCase();
+    	            return {
+    	                send: function(headers, complete){
+    	                    xdr = new XDomainRequest();
+    	                    if (/^\d+$/.test(userOptions.timeout)) {
+    	                        xdr.timeout = userOptions.timeout;
+    	                    }
+    	                    xdr.ontimeout = function(){
+    	                        complete(500, 'timeout');
+    	                    };
+    	                    xdr.onload = function(){
+    	                        var allResponseHeaders = 'Content-Length: ' + xdr.responseText.length + '\r\nContent-Type: ' + xdr.contentType;
+    	                        var status = {
+    	                            code: 200,
+    	                            message: 'success'
+    	                        };
+    	                        var responses = {
+    	                            text: xdr.responseText
+    	                        };
+
+    	                                try {
+    	                                    if (userType === 'json') {
+    	                                        try {
+    	                                            responses.json = JSON.parse(xdr.responseText);
+    	                                        } catch(e) {
+    	                                            status.code = 500;
+    	                                            status.message = 'parseerror';
+    	                                            //throw 'Invalid JSON: ' + xdr.responseText;
+    	                                        }
+    	                                    } else if ((userType === 'xml') || ((userType !== 'text') && xmlRegEx.test(xdr.contentType))) {
+    	                                        var doc = new ActiveXObject('Microsoft.XMLDOM');
+    	                                        doc.async = false;
+    	                                        try {
+    	                                            doc.loadXML(xdr.responseText);
+    	                                        } catch(e) {
+    	                                            doc = undefined;
+    	                                        }
+    	                                        if (!doc || !doc.documentElement || doc.getElementsByTagName('parsererror').length) {
+    	                                            status.code = 500;
+    	                                            status.message = 'parseerror';
+    	                                            throw 'Invalid XML: ' + xdr.responseText;
+    	                                        }
+    	                                        responses.xml = doc;
+    	                                    }
+    	                                } catch(parseMessage) {
+    	                                    throw parseMessage;
+    	                                } finally {
+    	                                    complete(status.code, status.message, responses, allResponseHeaders);
+    	                                }
+    	                            };
+    	                            xdr.onerror = function(){
+    	                                complete(500, 'error', {
+    	                                    text: xdr.responseText
+    	                                });
+    	                            };
+    	                            xdr.open(options.type, options.url);
+    	                            //xdr.send(userOptions.data);
+    	                            xdr.send();
+    	                        },
+    	                        abort: function(){
+    	                            if (xdr) {
+    	                                xdr.abort();
+    	                            }
+    	                        }
+    	                    };
+    	                }
+    	            });
+    	    };
+
+    	jQuery.support.cors = true;
+    	
+    }
+    
+    
+    this.setTranslate = function(lang){
+
+        // Listado de variables con los textos por idiomas
+        var locale_en = '{"widget123_badget_top_text_safe":"HOTEL CERTIFIED ACCORDING TO THE GLOBAL HOTEL SECURITY STANDARD©","widget123_badget_top_text_trip":"TRIPADVISOR CERTIFICATE OF EXCELLENCE","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_ar = '{"widget123_badget_top_text_safe":"لفندق معتَمد وفق معايير Global Hotel Security Standard©","widget123_badget_top_text_trip":"شهادة التميز من موقع تريب أدفايزر (TripAdvisor)","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_cn = '{"widget123_badget_top_text_safe":"符合全球酒店安全标准 (Global Hotel Security Standard©) 的认证酒店","widget123_badget_top_text_trip":"TripAdvisor 优秀证书","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_da = '{"widget123_badget_top_text_safe":"Hotel certificeret i overensstemmelse med Global Hotel Security Standard©","widget123_badget_top_text_trip":"TripAdvisor Certificate of Excellence","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';        
+        var locale_de = '{"widget123_badget_top_text_safe":"Hotel ist zertifiziert gemäß dem Global Hotel Security Standard©","widget123_badget_top_text_trip":"TripAdvisor Zertifikat für Exzellenz","widget123_badget_top_text_world_luxury_hotel":"Die beste Luxus-Aussicht von der Dachterrasse – Frankfreich 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_es = '{"widget123_badget_top_text_safe":"Hotel certificado conforme al Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certificado de Excelencia de TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_fi = '{"widget123_badget_top_text_safe":"Hotellilla on Global Hotel Security Standard© -turvallisuusstandardin sertifikaatti","widget123_badget_top_text_trip":"TripAdvisorin Erinomainen kohde -sertifikaatti","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_fr = '{"widget123_badget_top_text_safe":"Hôtel certifié selon la Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certificat d’excellence Tripadvisor","widget123_badget_top_text_world_luxury_hotel":"Meilleur Rooftop de luxe- France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_it = '{"widget123_badget_top_text_safe":"Hotel certificato secondo il Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certificato di Eccellenza TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Miglior rooftop di lusso- Francia 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_jp = '{"widget123_badget_top_text_safe":"ホテルは、Global Hotel Security Standard© に基づき認定を受けました","widget123_badget_top_text_trip":"トリップアドバイザー エクセレンス認証","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_nl = '{"widget123_badget_top_text_safe":"Hotel gecertificeerd volgens de Global Hotel Security Standard©","widget123_badget_top_text_trip":"TripAdvisor Certificaat van uitmuntendheid","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_no = '{"widget123_badget_top_text_safe":"Hotell sertifisert i henhold til Global Hotel Security Standard©","widget123_badget_top_text_trip":"TripAdvisor Certificate of Excellence","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_pl = '{"widget123_badget_top_text_safe":"Hotel posiadający certyfikat zgodności z normą Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certyfikat doskonałości TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_pt_BR = '{"widget123_badget_top_text_safe":"Hotel certificado de acordo com o Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certificado de excelência Trip Advisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_ru = '{"widget123_badget_top_text_safe":"Отель сертифицирован по глобальному стандарту безопасности отелей Global Hotel Security Standard©","widget123_badget_top_text_trip":"Сертификат отличия портала TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"ОТЕЛЬ С ЛУЧШИМ ПАНОРАМНЫМ ВИДОМ – ФРАНЦИЯ 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_sv = '{"widget123_badget_top_text_safe":"Hotellet har certifierats i enlighet med Global Hotel Security Standard©","widget123_badget_top_text_trip":"TripAdvisors Certificate of Excellence","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_bg = '{"widget123_badget_top_text_safe":"Хотел, сертифициран в съответствие с Global Hotel Security Standard©","widget123_badget_top_text_trip":"Сертификат за отличие от TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_cs = '{"widget123_badget_top_text_safe":"Hotel certifikován podle normy Global Hotel Security Standard©","widget123_badget_top_text_trip":"Certifikát výjimečnosti od společnosti TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_et = '{"widget123_badget_top_text_safe":"Hotellil on Global Hotel Security Standard©-i sertifikaat","widget123_badget_top_text_trip":"TripAdvisori kvaliteedisertifikaat","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_is = '{"widget123_badget_top_text_safe":"Staðfest er að hótelið samræmist Global Hotel Security Standard©","widget123_badget_top_text_trip":"Gæðavottorð frá Tripadvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_lt = '{"widget123_badget_top_text_safe":"Viešbutis atitinka „Global Hotel Security Standard©“ standartą","widget123_badget_top_text_trip":"„TripAdvisor“ aukščiausios kokybės sertifikatas","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_lv = '{"widget123_badget_top_text_safe":"Viesnīca ir sertificēta atbilstoši Global Hotel Security Standard© standartiem","widget123_badget_top_text_trip":"TripAdvisor Izcilības sertifikāts","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_el = '{"widget123_badget_top_text_safe":"Ξενοδοχείο πιστοποιημένο σύμφωνα με το Global Hotel Security Standard©","widget123_badget_top_text_trip":"Πιστοποιητικό Διάκρισης του TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_hr = '{"widget123_badget_top_text_safe":"Hotel je certificiran po standardu Global Hotel Security Standard©α με το Global Hotel Security Standard©","widget123_badget_top_text_trip":"Dobitnik certifikata izvrsnosti TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_hu = '{"widget123_badget_top_text_safe":"A Global Hotel Security Standard© szerint tanúsított szálloda","widget123_badget_top_text_trip":"TripAdvisor Kiválósági tanúsítvány","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_tr = '{"widget123_badget_top_text_safe":"Küresel Otel Güvenliği Standardı\'na göre sertifikalandırılmış otel","widget123_badget_top_text_trip":"TripAdvisor Mükemmellik Sertifikası","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_uk = '{"widget123_badget_top_text_safe":"Готель сертифіковано згідно з глобальним стандартом безпеки готелів Global Hotel Security Standard©","widget123_badget_top_text_trip":"Cертифікат якості TripAdvisor","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_ge = '{"widget123_badget_top_text_safe":"სასტუმრო სერტიფიცირებულია Global Hotel Security Standard©-ის შესაბამისად","widget123_badget_top_text_trip":"TripAdvisor-ის ხარისხის სერტიფიკატი","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        var locale_am = '{"widget123_badget_top_text_safe":"Հյուրանոցն ունի Global Hotel Security Standard© չափանիշներին համապատասխանության վկայական","widget123_badget_top_text_trip":"TripAdvisor-ի գերազանցության վկայական","widget123_badget_top_text_world_luxury_hotel":"Best Luxury Rooftop View – France 2016","widget123_badget_top_text_webcam":"LIVE WEBCAM"}';
+        
+        // Array de traducciones
+        var translations = {
+            en:locale_en,
+            en_UK:locale_en,
+            ar:locale_ar,
+            cn:locale_cn,
+            da:locale_da,
+            de:locale_de,
+            es:locale_es,
+            fi:locale_fi,
+            fr:locale_fr,
+            it:locale_it,
+            jp:locale_jp,
+            nl:locale_nl,
+            no:locale_no,
+            pl:locale_pl,
+            pt_BR:locale_pt_BR,
+            ru:locale_ru,
+            sv:locale_sv,
+            bg:locale_bg,
+            cs:locale_cs,
+            et:locale_et,
+            is:locale_is,
+            lt:locale_lt,
+            lv:locale_lv,
+            el:locale_el,
+            hr:locale_hr,
+            hu:locale_hu,
+            tr:locale_tr,
+            uk:locale_uk,
+            ge:locale_ge,
+            am:locale_am,    
+          
+        };
+
+        // Array con las traducciones por idioma
+        var t = JSON.parse(unescape(translations[lang]));
+        
+        return t;
+
+    }
+ 
+    
+})(window, document,jQuery);
